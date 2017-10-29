@@ -1,22 +1,26 @@
 <template>
   <div id="search-page">
     <div id="title-container">
+
       <div id="title-box">
         <h1>Photo Scout</h1>
         <h2>Where will you go next?</h2>
-        <searchbar v-bind:button="true"></searchbar>
       </div>
+
+      <loginform></loginform>
     </div>
   </div>
 </template>
 
 <script>
 import searchbar from './Components/SearchBar.vue'
+import loginform from './Components/LoginForm.vue'
 
 export default {
   name: 'search',
   components:{
-    searchbar
+    searchbar,
+    loginform
   },
   data () {
     return {
@@ -38,9 +42,10 @@ export default {
     #title-container {
         height: 100vh;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.6) 40%,rgba(0,0,0,0) 100%);
+        background: linear-gradient(to top, rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.7) 40%,rgba(0,0,0,0) 100%);
         text-align: center;
 
         h1, h2 {
