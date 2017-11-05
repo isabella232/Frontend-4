@@ -1,13 +1,13 @@
 <template>
-    <div class="info" v-on:click="image.Selected = image.Selected?false:true">
+    <div class="item" v-on:click="tileAction" v-bind:fid="image.flickr_id">
         <span class="indicator" :class="image.Selected?'selected':null">
-            <i v-if="image.Lat != 0" class="fa fa-map" aria-hidden="true"></i>
+            <i v-if="image.latitude != 0" class="fa fa-map" aria-hidden="true"></i>
         </span>
-        <img v-bind:src="image.Url">
+        <img v-bind:src="getUrl(image)">
 
         <div class="description">
-            <span class="title">{{image.Title}}</span>
-            <span class="owner">{{image.Owner}} - all rights reserved</span>
+            <span class="title">{{image.title}}</span>
+            <span class="owner">{{image.owner}} - all rights reserved</span>
         </div>
     </div>
 </template>
@@ -19,13 +19,25 @@ export default {
     data () {
         return {
         }
+    },
+    methods: {
+        getUrl: function(image) {
+            if(image.url)
+                return image.url
+            else {
+                return 'https://farm'+ image.farm +'.staticflickr.com/'+  image.server +'/'+ image.id +'_'+ image.secret +'.jpg'
+            }
+        },
+        tileAction: function(){
+            console.log("clicked")
+            this.$emit("selected")
+        }
     }
 }
 </script>
 
 <style lang="scss">
-.info {
-    margin: 10px;
+.item {
     display: block;
 
     &:hover {

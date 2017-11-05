@@ -10,15 +10,15 @@ export default {
 
     // Send a request to the login URL and save the returned JWT
     login(context, creds) {
-        // console.log(context);
         context.$http.get(LOGIN_URL, {
             headers: {
                 "Authorization": "Basic " + btoa(creds.username + ":" + creds.password)
             }
         }).then( data => {
             localStorage.setItem('token', data.body.token)
-            console.log(data.body.token)
             this.user.authenticated = true
+            router.push('/travel')
+            next()
         }, response => {
             context.error = response
         })
@@ -41,8 +41,9 @@ export default {
 
     // The object to be passed as a header for authenticated requests
     getAuthHeader() {
+        var jwt = localStorage.getItem('token')
         return {
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            "Authorization": "Basic " + btoa(jwt + ":*")
         }
     }
 }

@@ -1,67 +1,100 @@
 <template>
     <nav id="navigation-panel">
-        <div class="floating">
-            <div id="title">
-                <h1><a href="index.html">Photo Scout</a></h1>
-
-                <searchbar></searchbar>
-
-                <keywords></keywords>
-            </div>
-            <categories></categories>
-            <guidedisplay></guidedisplay>
-        </div>
+        <span class="logo">
+            <h1>
+                <router-link to="/">Photo Scout</router-link>
+            </h1>
+        </span>
+        <ul class="links">
+            <li>Explore</li>
+            <li v-if="authenticated">
+                <router-link to="/travel">Travel</router-link>
+            </li>
+            <li v-if="authenticated">Achievements</li>
+        </ul>
+        <ul class="user">
+            <li v-if="!authenticated">Sign in</li>
+            <li v-if="!authenticated">Sign up</li>
+            <li v-if="authenticated">Account</li>
+        </ul>
     </nav>
 </template>
 
 <script>
-import searchbar from './SearchBar.vue'
-import categories from './Categories.vue'
-import keywords from './Keywords.vue'
-import guidedisplay from './GuideDisplay.vue'
-
+import auth from '../auth'
 
 export default {
   name: 'navbar',
+  data () {
+      return {
+        authenticated: auth.user.authenticated
+      }
+  },
   components:{
-    searchbar,
-    categories,
-    keywords,
-    guidedisplay
   },
 }
 </script>
 
 <style lang="scss">
 #navigation-panel {
-    width: 15%;
-    height: 100vh;
-    border-right: 1px solid black;
-    position: relative;
-    display: block;
+    width: 80vw;
+    height: 3.5em;
+    background-color: white;
+    position: fixed;
+    margin: 1em 10vw;
+    border-radius: 2em;
+    padding: 0 3em;
+    display: flex;
+    align-items: center;
+    color: #333;
 
-    .floating {
-        position: fixed;
-        display: block;
-        width: inherit;
-    }
+    z-index: 999;
 
-    #title {
-        position: relative;
-        display: block;
-        width: 100%;
-    }
-
-    #title {
-        border-bottom: 1px solid #111;
+    .logo {
+        font-size: 1.5em;
+        display: flex;
+        align-items: center;
 
         h1 {
-            width: 100%;
-            font-weight: 300;
-            text-align: center;
-            padding: 2em 0 0 0;
-            margin: 0;
+            font-size: 0.8em;
+            margin-left: 1em;
+            font-weight: lighter;
+
+            a {
+                color: #333;
+            }
         }
+    }
+
+    .links, .user {
+        list-style: none;
+
+        li {
+            float: left;
+            margin-left: 1em;
+
+            a {
+                color: #333;
+
+                &:hover {
+                    color: #8E44AD;
+                }
+            }
+
+            &:not(:first-child ) {
+                &:before {
+                    content: " ";
+                    border-left: 1px solid #ddd;
+                    margin-right: 1em;
+                }
+            }
+        }
+    }
+
+    .user {
+        order: 2;
+        margin-left: auto;
+        color: #8E44AD;
     }
 }
 </style>
