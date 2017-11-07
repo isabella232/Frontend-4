@@ -2,12 +2,13 @@
   <div id="guide-view">
     <div v-for="(guide, index) in guides" v-bind:key="index" class="guide">
       <router-link :to="{ name: 'guide', params: { guideID: guide.id, view: 'view' }}">
-        <div class="bg" v-bind:style='{backgroundImage: "url(" + guide.photos[0].url + ")", }'></div>
+        <div class="bg" v-if="guide.photo" v-bind:style='{backgroundImage: "url(" + guide.photos[0].url + ")", }'></div>
         <h3 class="title">{{guide.title}}</h3>
       </router-link>
     </div>
     <div class="guide new">
-      <h3 class="title">Create a new guide</h3>
+      <input type="text" placeholder="Create a new guide" class="title input" v-model="newguide">
+      <p v-if="newguide" class="title button" v-on:click="createGuide">Create!</p>
     </div>
   </div>
 </template>
@@ -22,7 +23,8 @@ export default {
 
   data () {
     return {
-      guides: []
+      guides: [],
+      newguide: ""
     }
   },
 
@@ -37,6 +39,25 @@ export default {
       }, response => {
           // error callback
       });
+  },
+
+  methods: {
+    createGuide: function () {
+      this.$http.post('http://127.0.0.1:5000/api/v1/guides',
+      {
+        "title": this.newguide
+      }, {
+        headers: auth.getAuthHeader()
+      }).then(response => {
+
+          // get body data
+          this.guides =  response.body;
+
+      }, response => {
+          // error callback
+      });
+
+    }
   }
 }
 </script>
@@ -58,6 +79,9 @@ export default {
     flex: 10 0 auto;
     position: relative;
     flex-grow: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     width: 25em;
     height: 18em;
@@ -82,7 +106,7 @@ export default {
       color: white;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       text-align: center;
-      margin-top: 1em;
+      // margin-top: 1em;
       font-size: 2em;
       font-weight: normal;
 
@@ -102,6 +126,16 @@ export default {
         font-size: 2em;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-weight: normal;
+
+        &.input {
+          border: none;
+          background: none;
+        }
+
+        &.button {
+          font-weight: 300;
+          font-size: 1.2em;
+        }
       }
     }
   }

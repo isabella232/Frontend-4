@@ -15,7 +15,10 @@
         <ul class="user">
             <li v-if="!authenticated">Sign in</li>
             <li v-if="!authenticated">Sign up</li>
-            <li v-if="authenticated">Account</li>
+            <li v-if="authenticated">
+                <router-link to="/account">Account</router-link>
+            </li>
+            <li v-if="authenticated" v-on:click="logout">Log out</li>
         </ul>
     </nav>
 </template>
@@ -32,6 +35,11 @@ export default {
   },
   components:{
   },
+  methods: {
+      logout: function () {
+          auth.logout()
+      }
+  }
 }
 </script>
 

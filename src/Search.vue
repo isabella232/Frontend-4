@@ -8,7 +8,7 @@
         <h2>Where will you go next?</h2>
       </div>
 
-      <loginform></loginform>
+      <loginform v-if="!authenticated"></loginform>
     </div>
   </div>
 </template>
@@ -17,6 +17,7 @@
 import searchbar from './Components/SearchBar.vue'
 import loginform from './Components/LoginForm.vue'
 import navbar from './Components/Navbar.vue'
+import auth from './auth'
 
 export default {
   name: 'search',
@@ -27,6 +28,7 @@ export default {
   },
   data () {
     return {
+        authenticated: auth.user.authenticated
     }
   }
 }

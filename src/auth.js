@@ -27,6 +27,8 @@ export default {
     logout() {
         localStorage.removeItem('token')
         this.user.authenticated = false
+        router.push('/')
+        next()
     },
 
     checkAuth() {
