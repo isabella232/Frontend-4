@@ -1,8 +1,8 @@
 <template>
   <div id="guide-view">
-    <div v-for="(guide, index) in guides" v-bind:key="index" class="guide">
+    <div v-for="(guide, index) in guideByDate" v-bind:key="index" class="guide">
       <router-link :to="{ name: 'guide', params: { guideID: guide.id, view: 'view' }}">
-        <div class="bg" v-if="guide.photo" v-bind:style='{backgroundImage: "url(" + guide.photos[0].url + ")", }'></div>
+        <div class="bg" v-if="guide.photos[0]" v-bind:style='{backgroundImage: "url(" + guide.photos[0].url + ")", }'></div>
         <h3 class="title">{{guide.title}}</h3>
       </router-link>
     </div>
@@ -39,6 +39,14 @@ export default {
       }, response => {
           // error callback
       });
+  },
+
+  computed: {
+    guideByDate: function () {
+      return this.guides.sort((a,b) =>
+        new Date(a.creation) < new Date(b.creation)
+      )
+    }
   },
 
   methods: {
@@ -90,10 +98,12 @@ export default {
 
     overflow: hidden;
 
+    border: 1px solid #333;
+
     .bg {
       background: no-repeat center center;
       background-size: cover;
-      filter: sepia(70%) saturate(60%) brightness(0.8);
+      filter: sepia(70%) saturate(90%) brightness(0.4);
       position: absolute;
       width: 110%;
       height: 110%;
@@ -109,10 +119,12 @@ export default {
       // margin-top: 1em;
       font-size: 2em;
       font-weight: normal;
+      position: relative;
 
       text-align: center;
       width: 100%;
       z-index: 2;
+      text-shadow: 0px 0px 4px black;
     }
 
     &.new {
