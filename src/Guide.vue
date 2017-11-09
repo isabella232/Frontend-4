@@ -1,9 +1,9 @@
 <template>
   <div id="guide-page">
       <navbar></navbar>
-    <div class="hero">
-      <h2>{{guide.title}}</h2>
-    </div>
+
+    <hero title="guide.title" image="bg2.jpg" left="true"></hero>
+
     <nav id="app-nav">
       <ul>
         <li><router-link to="view">View</router-link></li>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import api from './api'
 import imageTile from './Components/ImageTile.vue'
 import navbar from './Components/Navbar.vue'
 import searchbar from './Components/SearchBar.vue'
@@ -37,6 +38,7 @@ import auth from './auth'
 import Vue from 'vue'
 import {VueMasonryPlugin} from 'vue-masonry';
 import Vue2Leaflet from 'vue2-leaflet';
+import hero from './Components/Hero.vue'
 
 Vue.use(VueMasonryPlugin)
 
@@ -48,7 +50,8 @@ export default {
       searchbar,
       'v-map': Vue2Leaflet.Map,
       'v-tilelayer' :Vue2Leaflet.TileLayer,
-      'v-marker': Vue2Leaflet.Marker
+      'v-marker': Vue2Leaflet.Marker,
+      hero
   },
   props: ['guideID', 'view'],
   data () {
@@ -59,90 +62,42 @@ export default {
   },
 
   mounted: function () {
-      this.$http.get('http://127.0.0.1:5000/api/v1/guide?id=' + this.guideID, {
-        headers: auth.getAuthHeader()
-      }).then(response => {
-
-          // get body data
-          this.guide =  response.body;
-
-      }, response => {
-          // error callback
-      });
+    api.GetGuidePhoto(this, data => {this.guide = data.body}, function(){}, {id: this.guideID})
 
 
-      this.$http.get('http://127.0.0.1:5000/api/v1/photos/search?keywords=arifat', {
-        headers: auth.getAuthHeader()
-      }).then(response => {
-
-          // get body data
-          this.photos =  response.body.photos.photo;
-
-      }, response => {
-          // error callback
-      });
+    api.SearchPhoto(this, data => {this.photos =  data.body.photos.photo}, function(){}, {keywords: "arifat"})
   },
 
   methods: {
     removePhoto: function(id){
-      this.$http.delete('http://127.0.0.1:5000/api/v1/photos/selected', {
-        headers: auth.getAuthHeader(),
-        body: {
-          "guide": this.guideID,
-          "image": {
-            "origin": "flickr",
-            "id": id.flickr_id
-          }
+      api.RemovePhoto(this, function(){}, function(){}, {
+        "guide": this.guideID,
+        "image": {
+          "origin": "flickr",
+          "id": id.flickr_id
         }
-      }).then(response => {
-
-          // get body data
-          console.log(response.body)
-          // this.photos =  response.body.photos.photo;
-
-      }, response => {
-          // error callback
-      });
+      })
     },
 
     addImage:function(photo) {
-      console.log(photo)
-      this.$http.put('http://127.0.0.1:5000/api/v1/photos/selected', {
-          "guide": this.guideID,
-          "image": {
-            "origin": "flickr",
-            "id": photo.id
-          }
-        },{
-        headers: auth.getAuthHeader()
-      }).then(response => {
-
-          // get body data
-          console.log(response.body)
-          // this.photos =  response.body.photos.photo;
-
-      }, response => {
-          // error callback
-      });
+      api.AddPhoto(this, function(){}, function(){}, {
+        "guide": this.guideID,
+        "image": {
+          "origin": "flickr",
+          "id": photo.id
+        }
+      })
     },
 
     searchImage:function(tags) {
-      console.log(tags)
-      this.$http.get('http://127.0.0.1:5000/api/v1/photos/search?keywords='+tags.replace(/ /g,"+"), {
-        headers: auth.getAuthHeader()
-      }).then(response => {
-
-          // get body data
-          this.photos =  response.body.photos.photo;
-          console.log("redraw")
-          var that=this
-          setTimeout(function(){
-          that.$redrawVueMasonry();
-}, 2000);
-
-      }, response => {
-          // error callback
-      });
+      api.SearchPhoto(this, data => {
+        // get body data
+        this.photos =  data.body.photos.photo
+        var that=this
+        setTimeout(function(){
+          that.$redrawVueMasonry()
+        }, 2000)
+      }, function(){}, {keywords: tags.split(" ")})
     }
   }
 }
@@ -151,39 +106,6 @@ export default {
 <style lang="scss">
 @import "styles/global.scss";
 @import "../node_modules/leaflet/dist/leaflet.css";
-
-#guide-page {
-  .hero {
-    background: url('assets/bg.jpg') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    height: 35em;
-
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    position: relative;
-
-    h2 {
-      text-align: center;
-      width: 100%;
-      font-size: 3em;
-    }
-
-    &:after {
-      content: " ";
-      transform: rotate(3deg);
-      background-color: #FCFCFC;
-      width: 150%;
-      height: 100px;
-      position: absolute;
-      left: -25%;
-      bottom: -50px;
-    }
-  }
-}
 
 #app-nav {
   background-color: #FCFCFC;

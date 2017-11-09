@@ -1,7 +1,5 @@
 import {router} from './index'
-
-const API_URL = "http://127.0.0.1:5000/api/v1"
-const LOGIN_URL = API_URL + "/users/login"
+import api from './api'
 
 export default {
     user: {
@@ -10,15 +8,10 @@ export default {
 
     // Send a request to the login URL and save the returned JWT
     login(context, creds) {
-        context.$http.get(LOGIN_URL, {
-            headers: {
-                "Authorization": "Basic " + btoa(creds.username + ":" + creds.password)
-            }
-        }).then( data => {
+        api.LoginUser(context, creds, data => {
             localStorage.setItem('token', data.body.token)
             this.user.authenticated = true
             router.push('/travel')
-            next()
         }, response => {
             context.error = response
         })
@@ -28,7 +21,6 @@ export default {
         localStorage.removeItem('token')
         this.user.authenticated = false
         router.push('/')
-        next()
     },
 
     checkAuth() {

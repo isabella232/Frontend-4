@@ -1,8 +1,9 @@
 <template>
   <div id="account-page">
     <navbar></navbar>
-    <div class="hero">
-    </div>
+
+    <hero image="account.jpg"></hero>
+
     <div id="account-data">
         <h2 v-if="user.fullname">Hi {{user.fullname}}!</h2>
         <h2 v-else>Hi {{user.username}}!</h2>
@@ -34,13 +35,16 @@
 </template>
 
 <script>
+import api from './api'
+
 import navbar from './Components/Navbar.vue'
-import auth from './auth'
+import hero from './Components/Hero.vue'
 
 export default {
   name: 'account',
   components:{
-    navbar
+    navbar,
+    hero
   },
   data () {
     return {
@@ -54,46 +58,28 @@ export default {
     }
   },
   mounted: function () {
-      this.$http.get('http://127.0.0.1:5000/api/v1/user', {
-        headers: auth.getAuthHeader()
-      }).then(response => {
-
-          // get body data
-          this.user =  response.body;
-          this.original = Object.assign({}, response.body)
-
-      }, response => {
-          // error callback
-      });
+    api.GetUserInfo(this, data => {
+      this.user =  data.body;
+      this.original = Object.assign({}, data.body)
+    })
   },
 
   methods: {
     submitInfo: function() {
-      console.log(this.user.fullname +"!="+ this.original.fullname)
 
       if( this.user.fullname != this.original.fullname) {
-        this.$http.put('http://127.0.0.1:5000/api/v1/user', {
-            "label": "fullname",
-            "data": this.user.fullname
-          }, {
-          headers: auth.getAuthHeader()
-        }).then(response => {
-        }, response => {
-            // error callback
-        });
+        api.UpdateUserInfo(this, function(){}, function(){}, {
+          "label": "fullname",
+          "data": this.user.fullname
+        })
       }
 
       if( this.passwords[0] != "" && this.passwords[1] != 0 && this.passwords[1] == this.passwords[2]) {
-        this.$http.put('http://127.0.0.1:5000/api/v1/user', {
-            "label": "password",
-            "data": this.passwords[1],
-            "oldpass": this.passwords[0]
-          }, {
-          headers: auth.getAuthHeader()
-        }).then(response => {
-        }, response => {
-            // error callback
-        });
+        api.UpdateUserInfo(this, function(){}, function(){}, {
+          "label": "password",
+          "data": this.passwords[1],
+          "oldpass": this.passwords[0]
+        })
       }
     }
   }
@@ -104,37 +90,6 @@ export default {
 @import "styles/global.scss";
 
 #account-page {
-  .hero {
-    background: url('assets/account.jpg') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    background-position-y: -25em;
-    height: 25em;
-
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    position: relative;
-
-    h2 {
-      text-align: center;
-      width: 100%;
-      font-size: 3em;
-    }
-
-    &:after {
-      content: " ";
-      transform: rotate(-3deg);
-    background-color: #FCFCFC;
-      width: 150%;
-      height: 100px;
-      position: absolute;
-      left: -25%;
-      bottom: -50px;
-    }
-  }
 
   #account-data {
     color: #333;
@@ -160,8 +115,8 @@ export default {
       .label {
         width: 20%;
         border-radius: 1em 0 0 1em;
-        background-color: #eee;
-        border: 1px solid #DADFE1;
+        background-color: $box-light-2;
+        border: 1px solid $border-light;
         border-right: none;
         font-weight: 300;
 
@@ -169,8 +124,8 @@ export default {
       .data {
         width: 80%;
         border-radius: 0 1em 1em 0;
-        background-color: white;
-        border: 1px solid #DADFE1;
+        background-color: $box-light-1;
+        border: 1px solid $border-light;
         border-left: none;
         text-align: left;
       }
@@ -181,14 +136,17 @@ export default {
       text-align: center;
       font-weight: 300;
       position: relative;
+      background-color: $background-light;
+      z-index: 2;
 
-      &:before {
+      &:after {
         content: " ";
         position: absolute;
         width: 100%;
         left: 0;
         top: 50%;
-        border-top: 1px solid #DADFE1;
+        border-top: 1px solid $border-light;
+        z-index: 1;
       }
     }
 
@@ -201,7 +159,7 @@ export default {
       font-weight: 300;
 
         &:hover {
-          background-color: #DADFE1;
+          background-color: $border-light;
         }
     }
   }

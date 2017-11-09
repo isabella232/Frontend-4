@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import api from '../api'
 import auth from '../auth'
 
 export default {
@@ -29,16 +30,7 @@ export default {
   },
 
   mounted: function () {
-      this.$http.get('http://127.0.0.1:5000/api/v1/guides', {
-        headers: auth.getAuthHeader()
-      }).then(response => {
-
-          // get body data
-          this.guides =  response.body;
-
-      }, response => {
-          // error callback
-      });
+    api.ListGuides(this, data => {this.guides = data.body}, function(){})
   },
 
   computed: {
@@ -51,20 +43,7 @@ export default {
 
   methods: {
     createGuide: function () {
-      this.$http.post('http://127.0.0.1:5000/api/v1/guides',
-      {
-        "title": this.newguide
-      }, {
-        headers: auth.getAuthHeader()
-      }).then(response => {
-
-          // get body data
-          this.guides =  response.body;
-
-      }, response => {
-          // error callback
-      });
-
+      api.CreateGuide(this, function(){}, function(){}, {title: this.newguide})
     }
   }
 }
