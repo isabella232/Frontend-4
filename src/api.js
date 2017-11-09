@@ -1,10 +1,10 @@
 import auth from './auth'
 
-var IS_HEROKU = false
+var IS_HEROKU = process.env.IS_HEROKU
 
 var URL_ORIGIN_HEROKU = "https://murmuring-fjord-85655.herokuapp.com"
 var URL_ORIGIN_LOCAL = "http://127.0.0.1:5000"
-var URL_ORIGIN = (IS_HEORKU ? URL_ORIGIN_HEROKU : URL_ORIGIN_LOCAL)
+var URL_ORIGIN = (IS_HEROKU ? URL_ORIGIN_HEROKU : URL_ORIGIN_LOCAL)
 
 var URL_API_VERSION = "/api/v1"
 
