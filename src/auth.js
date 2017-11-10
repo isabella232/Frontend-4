@@ -7,7 +7,7 @@ export default {
     },
 
     // Send a request to the login URL and save the returned JWT
-    login(context, creds) {
+    login: function(context, creds) {
         api.LoginUser(context, creds, data => {
             localStorage.setItem('token', data.body.token)
             this.user.authenticated = true
@@ -17,13 +17,13 @@ export default {
         })
     },
 
-    logout() {
+    logout: function() {
         localStorage.removeItem('token')
         this.user.authenticated = false
         router.push('/')
     },
 
-    checkAuth() {
+    checkAuth: function() {
         var jwt = localStorage.getItem('token')
         if(jwt) {
             this.user.authenticated = true
@@ -34,7 +34,7 @@ export default {
     },
 
     // The object to be passed as a header for authenticated requests
-    getAuthHeader() {
+    getAuthHeader: function() {
         var jwt = localStorage.getItem('token')
         return {
             "Authorization": "Basic " + btoa(jwt + ":*")

@@ -1,1 +1,1 @@
-web: npm install; npm run heroku
+web: npm run build; npm run start

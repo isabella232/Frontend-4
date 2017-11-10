@@ -46,10 +46,7 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     noInfo: true,
-    overlay: true,
-    port: process.env.PORT || 8080,
-    host: "0.0.0.0",
-    disableHostCheck: true
+    overlay: true
   },
   performance: {
     hints: false
@@ -57,7 +54,9 @@ module.exports = {
   devtool: '#eval-source-map'
 }
 
+
 if (process.env.NODE_ENV === 'production') {
+  const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
   module.exports.devtool = '#source-map'
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
@@ -66,11 +65,7 @@ if (process.env.NODE_ENV === 'production') {
         NODE_ENV: '"production"'
       }
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
+    new UglifyJSPlugin({
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
