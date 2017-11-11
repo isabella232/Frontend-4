@@ -1,31 +1,45 @@
 <template>
   <div id="guide-view">
-    <div v-for="(guide, index) in guideByDate" v-bind:key="index" class="guide">
-      <router-link :to="{ name: 'guide', params: { guideID: guide.id, view: 'view' }}">
-        <div class="bg" v-if="guide.photos[0]" v-bind:style='{backgroundImage: "url(" + guide.photos[0].url + ")", }'></div>
-        <h3 class="title">{{guide.title}}</h3>
-      </router-link>
-    </div>
-    <div class="guide new">
-      <input type="text" placeholder="Create a new guide" class="title input" v-model="newguide">
-      <p v-if="newguide" class="title button" v-on:click="createGuide">Create!</p>
-    </div>
+    <swiper :options="swiperOption">
+      <swiper-slide v-for="(guide, index) in guideByDate" v-bind:key="index" class="guide" v-on:mouseover="onGuideSelected(guide)">
+        <router-link :to="{ name: 'guide', params: { guideID: guide.id, view: 'view' }}">
+          <div class="bg" v-if="guide.photos[0]" v-bind:style='{backgroundImage: "url(" + guide.photos[0].url + ")", }'></div>
+          <h3 class="title">{{guide.title}}</h3>
+        </router-link>
+      </swiper-slide>
+      <swiper-slide class="guide new">
+        <input type="text" placeholder="Create a new guide" class="title input" v-model="newguide">
+        <p v-if="newguide" class="title button" v-on:click="createGuide">Create!</p>
+      </swiper-slide>
+      <div class="swiper-pagination" slot="pagination"></div>
+    </swiper>
   </div>
 </template>
 
 <script>
+
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import api from '../api'
 import auth from '../auth'
 
 export default {
   name: 'guides',
   components:{
+    swiper,
+    swiperSlide
   },
 
   data () {
     return {
       guides: [],
-      newguide: ""
+      newguide: "",
+      swiperOption: {
+          pagination: '.swiper-pagination',
+          slidesPerView: 4,
+          centeredSlides: true,
+          paginationClickable: true,
+          spaceBetween: 30
+        }
     }
   },
 
@@ -44,20 +58,21 @@ export default {
   methods: {
     createGuide: function () {
       api.CreateGuide(this, function(){}, function(){}, {title: this.newguide})
+    },
+    onGuideSelected: function(guide) {
+      this.$emit("guideSelected", guide)
     }
   }
 }
 </script>
 
-<style lang="scss">
-// @import "styles/global.scss";
+<style src="swiper/dist/css/swiper.css"></style>
 
+<style lang="scss">
 #guide-view {
-  display: flex;
+  display: block;
   position: relative;
   width: 100%;
-  overflow: auto;
-  align-items: center;
 
   .guide {
     display: flex;
@@ -78,6 +93,10 @@ export default {
     overflow: hidden;
 
     border: 1px solid #333;
+
+    &.swiper-slide-active .bg{
+      filter: sepia(20%) saturate(70%) brightness(0.7);
+    }
 
     .bg {
       background: no-repeat center center;

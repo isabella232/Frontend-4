@@ -9,11 +9,9 @@
         <i class="fa fa-search" aria-hidden="true"></i>
         <input type="text" placeholder="Search...">
       </div>
-      <guides></guides>
+      <guides v-on:guideSelected="guideSelected"></guides>
     </div>
-    <div id="guide-info">
-      <h2>Nontron</h2>
-    </div>
+    <guideinfo :guide="this.guide"></guideinfo>
   </div>
 </template>
 
@@ -21,17 +19,26 @@
 import navbar from './Components/Navbar.vue'
 import guides from './Components/Guides.vue'
 import hero from './Components/Hero.vue'
+import guideinfo from './Components/GuideInfo.vue'
 
 export default {
   name: 'travel',
   components:{
     navbar,
     guides,
-    hero
+    hero,
+    guideinfo
   },
   data () {
     return {
-      // {selected: "photo"}
+      guide:{}
+    }
+  },
+  methods: {
+    guideSelected: function (guide) {
+      console.log("Hover")
+      console.log(guide)
+      this.guide = guide
     }
   }
 }
