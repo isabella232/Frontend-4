@@ -1,15 +1,15 @@
 <template>
   <div id="guide-view">
-    <swiper :options="swiperOption">
+    <swiper :options="swiperOption" ref="guideSwiper">
+      <swiper-slide class="guide new">
+        <input type="text" placeholder="Create a new guide" class="title input" v-model="newguide">
+        <p v-if="newguide" class="title button" v-on:click="createGuide">Create!</p>
+      </swiper-slide>
       <swiper-slide v-for="(guide, index) in guideByDate" v-bind:key="index" class="guide" v-on:mouseover="onGuideSelected(guide)">
         <router-link :to="{ name: 'guide', params: { guideID: guide.id, view: 'view' }}">
           <div class="bg" v-if="guide.photos[0]" v-bind:style='{backgroundImage: "url(" + guide.photos[0].url + ")", }'></div>
           <h3 class="title">{{guide.title}}</h3>
         </router-link>
-      </swiper-slide>
-      <swiper-slide class="guide new">
-        <input type="text" placeholder="Create a new guide" class="title input" v-model="newguide">
-        <p v-if="newguide" class="title button" v-on:click="createGuide">Create!</p>
       </swiper-slide>
       <div class="swiper-pagination" slot="pagination"></div>
     </swiper>
@@ -38,7 +38,14 @@ export default {
           slidesPerView: 4,
           centeredSlides: true,
           paginationClickable: true,
-          spaceBetween: 30
+          spaceBetween: 30,
+          mousewheelControl: true,
+          onSlideChangeEnd: swiper => {
+            if(swiper.realIndex == 0)
+              this.$emit("guideSelected", "new")
+            else
+              this.$emit("guideSelected", this.guides[swiper.realIndex-1])
+          }
         }
     }
   },
@@ -57,7 +64,11 @@ export default {
 
   methods: {
     createGuide: function () {
-      api.CreateGuide(this, function(){}, function(){}, {title: this.newguide})
+      api.CreateGuide(this, data => {
+        // Add the newly created to the guide display list
+        this.guides.push(data.body)
+        this.$refs.guideSwiper.swiper.slideTo(1)
+      }, function(){}, {title: this.newguide})
     },
     onGuideSelected: function(guide) {
       this.$emit("guideSelected", guide)
