@@ -63,8 +63,9 @@ function Put(context, entrypoint, success, failure, headers, body) {
 }
 
 function Delete(context, entrypoint, success, failure, headers, body) {
-    context.$http.delete( URL_ORIGIN + URL_API_VERSION + entrypoint, body, {
-        headers: headers
+    context.$http.delete( URL_ORIGIN + URL_API_VERSION + entrypoint, {
+        headers: headers,
+        body: body
     }).then(
         data => { success(data) },
         response => { failure(response) }
@@ -94,9 +95,15 @@ export default {
         Post(context, ENTRYPOINT_GUIDES, success, failure, auth.getAuthHeader(), data)
     },
 
+    DeleteGuide(context, success, failure, data) {
+        Delete(context, ENTRYPOINT_GUIDE, success, failure, auth.getAuthHeader(), data)
+    },
+
     GetGuidePhoto(context, success, failure, data) {
         Get(context, ENTRYPOINT_GUIDE, success, failure, auth.getAuthHeader(), data)
     },
+
+
     SearchPhoto(context, success, failure, data) {
         Get(context, ENTRYPOINT_PHOTO_SEARCH, success, failure, auth.getAuthHeader(), data)
     },
