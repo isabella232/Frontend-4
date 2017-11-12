@@ -14,6 +14,11 @@
                 {{formatDate(guide.creation)}}
             </li>
             <li>
+                <i class="fa fa-calendar-o" aria-hidden="true"></i>
+                <strong>Edited:</strong>
+                {{formatDate(guide.last_edited)}}
+            </li>
+            <li>
                 <i class="fa fa-users" aria-hidden="true"></i>
                 <strong>Visibility:</strong>
                 {{guide.visibility ? 'Public' : 'Private'}}
