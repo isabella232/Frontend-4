@@ -6,7 +6,9 @@
             </h1>
         </span>
         <ul class="links">
-            <li>Explore</li>
+            <li>
+                <router-link to="/explore">Explore</router-link>
+            </li>
             <li v-if="authenticated">
                 <router-link to="/travel">Travel</router-link>
             </li>

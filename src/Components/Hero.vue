@@ -1,5 +1,5 @@
 <template>
-    <div class="hero" :class="{dark: dark, left:left}" v-bind:style='{backgroundImage: "url(" + imgUrl(image) + ")", }'>
+    <div class="hero" :class="{dark: dark, left:left, textBlack:textBlack}" v-bind:style='{backgroundImage: "url(" + imgUrl(image) + ")", }'>
         <h2 v-if="title">{{title}}</h2>
     </div>
 </template>
@@ -20,6 +20,7 @@ export default {
         'image',
         'dark',
         'left',
+        'textBlack'
     ]
 }
 </script>
@@ -66,6 +67,11 @@ export default {
     // Use the left corner
     &.left:after {
         transform: rotate(3deg);
+    }
+
+    // Use black text
+    &.textBlack {
+        color: $background-dark;
     }
 }
 </style>

@@ -15,8 +15,8 @@
             </li>
             <li>
                 <i class="fa fa-users" aria-hidden="true"></i>
-                <strong>Status:</strong>
-                Private
+                <strong>Visibility:</strong>
+                {{guide.visibility ? 'Public' : 'Private'}}
             </li>
             <li>
                 <i class="fa fa-picture-o" aria-hidden="true"></i>
@@ -28,6 +28,11 @@
             <div class="button" v-on:click="deleteGuide">
                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                 Remove
+            </div>
+
+            <div class="button" v-on:click="changeGuideVisibility">
+                <i class="fa fa-users" aria-hidden="true"></i>
+                Change to {{!guide.visibility ? 'Public' : 'Private'}}
             </div>
         </div>
     </div>
@@ -72,8 +77,15 @@ export default {
         },
 
         deleteGuide: function() {
-            console.log(this.guide.id)
             api.DeleteGuide(this, function(){}, function(){}, {"id": this.guide.id})
+        },
+
+        changeGuideVisibility: function() {
+            api.UpdateGuide(this, function(){}, function(){}, {
+                "id": this.guide.id,
+                "label": "visibility",
+                "data": this.guide.visibility == 0 ? 1 : 0
+            })
         }
     },
 }
@@ -130,7 +142,7 @@ export default {
 
             .button {
                 background-color: $box-light-2;
-                width: 50%;
+                width: 60%;
                 margin: 1em auto;
                 padding: 1em;
 

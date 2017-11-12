@@ -12,6 +12,8 @@
         </router-link>
       </swiper-slide>
       <div class="swiper-pagination" slot="pagination"></div>
+      <div class="swiper-button-prev" slot="button-prev"></div>
+      <div class="swiper-button-next" slot="button-next"></div>
     </swiper>
   </div>
 </template>
@@ -39,7 +41,8 @@ export default {
           centeredSlides: true,
           paginationClickable: true,
           spaceBetween: 30,
-          mousewheelControl: true,
+          nextButton: '.swiper-button-next',
+          prevButton: '.swiper-button-prev',
           onSlideChangeEnd: swiper => {
             if(swiper.realIndex == 0)
               this.$emit("guideSelected", "new")
@@ -84,6 +87,7 @@ export default {
   display: block;
   position: relative;
   width: 100%;
+  padding: 3em 0;
 
   .guide {
     display: flex;
@@ -98,7 +102,7 @@ export default {
 
     width: 25em;
     height: 18em;
-    margin: 3em;
+    // margin: 3em;
     border-radius: 0.5em;
 
     overflow: hidden;

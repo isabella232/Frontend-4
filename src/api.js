@@ -16,6 +16,8 @@ var ENTRYPOINT_GUIDE = "/guide"
 
 var ENTRYPOINT_GUIDES = "/guides"
 
+var ENTRYPOINT_GUIDES_PUBLIC = "/guides/public"
+
 var ENTRYPOINT_PHOTO_SELECTED = "/photos/selected"
 
 var ENTRYPOINT_PHOTO_SEARCH = "/photos/search"
@@ -97,6 +99,14 @@ export default {
 
     DeleteGuide(context, success, failure, data) {
         Delete(context, ENTRYPOINT_GUIDE, success, failure, auth.getAuthHeader(), data)
+    },
+
+    UpdateGuide(context, success, failure, data) {
+        Put(context, ENTRYPOINT_GUIDE, success, failure, auth.getAuthHeader(), data)
+    },
+
+    GetPublicGuides(context, success, failure) {
+        Get(context, ENTRYPOINT_GUIDES_PUBLIC, success, failure, {})
     },
 
     GetGuidePhoto(context, success, failure, data) {
