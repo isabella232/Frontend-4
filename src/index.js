@@ -26,9 +26,9 @@ export var router = new VueRouter({
 router.beforeEach((to, from, next) => {
   auth.checkAuth()
 
-  if (to.path !== '/' && !auth.user.authenticated) {
-    next('/')
-  }
+//   if ((to.path !== '/' && to.path !== '/explore' && to.path !=='/guide') && !auth.user.authenticated) {
+//     next('/')
+//   }
   next()
 })
 
@@ -45,4 +45,3 @@ Vue.http.interceptors.push(function(request, next) {
 const app = new Vue({
   router
 }).$mount('#app')
-console.log(app)

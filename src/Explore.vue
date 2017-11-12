@@ -5,7 +5,7 @@
     <hero title="Get inspired" image="inspiration.jpg" left="true"></hero>
 
     <section id="guides">
-        <div v-for="(guide, index) in guideByDate" v-bind:key="index" class="guide" v-on:mouseover="onGuideSelected(guide)">
+        <div v-for="(guide, index) in guideByDate" v-bind:key="index" class="guide">
             <router-link :to="{ name: 'guide', params: { guideID: guide.id, view: 'view' }}">
                 <div class="bg" v-if="guide.photos[0]" v-bind:style='{backgroundImage: "url(" + guide.photos[0].url + ")", }'></div>
                 <h3 class="title">{{guide.title}}</h3>
