@@ -12,6 +12,7 @@
   "dependencies": {
     "express": "^4.16.2",
     "moment": "^2.19.2",
+    "svg.js": "^2.6.3",
     "uglifyjs-webpack-plugin": "^1.0.1",
     "vue": "^2.4.4",
     "vue-awesome-swiper": "^2.6.7",
