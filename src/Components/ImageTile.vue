@@ -44,7 +44,7 @@ export default {
         .description {
             display: block;
             position: absolute;
-            margin: 10px;
+            margin: 0.3em;
             left: 0;
             right: 0;
             bottom: 0;
