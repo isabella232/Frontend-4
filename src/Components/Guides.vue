@@ -60,7 +60,7 @@ export default {
   computed: {
     guideByDate: function () {
       return this.guides.sort((a,b) =>
-        new Date(a.creation) < new Date(b.creation)
+        new Date(a.last_edited) < new Date(b.last_edited)
       )
     }
   },

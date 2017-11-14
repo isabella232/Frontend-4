@@ -8,7 +8,7 @@
       <ul>
         <li><router-link to="view">View</router-link></li>
         <li><router-link to="search" v-if="authenticated">Search</router-link></li>
-        <li><router-link to="map">Map</router-link></li>
+        <li><router-link to="map" v-if="hasMapData">Map</router-link></li>
       </ul>
     </nav>
     <div v-if="view=='view'" id="photo" v-masonry transition-duration="0.3s" item-selector=".item">
@@ -17,11 +17,8 @@
 
     <photoSearch v-if="view=='search'" :guideID="guide.id"></photoSearch>
 
-    <div v-if="view=='map'" id="map-view" >
-      <v-map :zoom=13 :center="[guide.photos[3].latitude, guide.photos[3  ].longitude]">
-        <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
-        <v-marker v-for="(photo, index) in guide.photos" v-bind:key="index" v-if="photo.latitude!=0" :lat-lng="[photo.latitude, photo.longitude]"></v-marker>
-      </v-map>
+    <div v-if="view=='map' && hasMapData" id="map-view" >
+      <mapView :photos="guide.photos"></mapView>
     </div>
   </div>
 </template>
@@ -37,6 +34,7 @@ import {VueMasonryPlugin} from 'vue-masonry';
 import Vue2Leaflet from 'vue2-leaflet';
 import hero from './Components/Hero.vue'
 import photoSearch from './Components/PhotoSearch.vue'
+import mapView from './Components/MapView.vue'
 
 Vue.use(VueMasonryPlugin)
 
@@ -50,7 +48,8 @@ export default {
       'v-tilelayer' :Vue2Leaflet.TileLayer,
       'v-marker': Vue2Leaflet.Marker,
       hero,
-      photoSearch
+      photoSearch,
+      mapView
   },
   props: ['guideID', 'view'],
   data () {
@@ -63,6 +62,23 @@ export default {
 
   mounted: function () {
     api.GetGuidePhoto(this, data => {this.guide = data.body}, function(){}, {id: this.guideID})
+  },
+
+  computed: {
+    hasMapData: function(){
+      // Check that there is any photo
+      if(this.guide.photos.length == 0)
+          return false
+
+      // Check that there is some position available
+      for(var i=0; i<this.guide.photos.length; i++) {
+          var photo = this.guide.photos[i]
+          if(photo.latitude != ""){
+              return true
+          }
+      }
+      return false
+    }
   },
 
   methods: {
@@ -105,11 +121,6 @@ export default {
 #map-view {
     width: 82%;
     margin: 2em auto;
-    height: 40em;
-
-    .leaflet-shadow-pane {
-      display: none;
-    }
 }
 
 #photo, #search-view {
