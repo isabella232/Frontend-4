@@ -15,10 +15,10 @@
         </section>
     </div>
     <div id="guideShortInfo">
-        <div class="smallMap" v-if="guide.photos.length > 0 && guide.photos.latitude !=0">
-            <v-map :zoom=4 :options=mapOptions :center="[guide.photos[0].latitude, guide.photos[0].longitude]">
+        <div class="smallMap" v-if="featuredPosition.valid">
+            <v-map :zoom=4 :options=mapOptions :center="[featuredPosition.latitude, featuredPosition.longitude]">
                 <v-tilelayer url="http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg "></v-tilelayer>
-                <v-marker :lat-lng="[guide.photos[0].latitude, guide.photos[0].longitude]"></v-marker>
+                <v-marker :lat-lng="[featuredPosition.latitude, featuredPosition.longitude]"></v-marker>
             </v-map>
         </div>
         <ul>
@@ -88,57 +88,24 @@ export default {
                 boxZoom: false,
                 scrollWheelZoom: false
             },
-            lensFocal: []
+            lensFocal: [],
+            featuredPosition: {
+                valid: false,
+                latitude: "",
+                longitude: ""
+            }
         }
     },
 
-    // updated () {
-    //     for(let i = 0; i<this.guide.photos.length; i++){
-    //         let photo = this.guide.photos[i]
-    //         if(photo.lensFocal)
-    //             this.lensFocal.push(photo.lensFocal.split(" "))
-    //     }
+    mounted () {
+        this.setFeaturedPosition()
+    },
 
-    //     this.lensFocal = lens.remapData(this.lensFocal)
-
-    //         var primeLenses = [
-    //     14,
-    //     20,
-    //     24,
-    //     28,
-    //     35,
-    //     40,
-    //     50,
-    //     85,
-    //     105,
-    //     135,
-    //     200,
-    //     300,
-    //     400
-    // ]
-    // var mappedPrime = lens.remapData(primeLenses)
-
-    //     var draw = SVG('lensDensityPlot').size(1500, 300)
-    //     var opacity = 0.1
-
-    // for(let i = 0; i < this.lensFocal.length; i++) {
-    //     var idat = this.lensFocal[i];
-    //     console.log(idat)
-    //     if(idat.length == 1){
-    //         var box = draw.rect(10,50).move(idat[0]-5,0).attr('fill-opacity', opacity).bbox()
-    //     }
-    //     else {
-    //         var box = draw.rect((idat[1] - idat[0])+10,50).move(idat[0]-5,0).attr('fill-opacity', opacity).bbox()
-    //     }
-
-    // }
-
-    // for(let i = 0; i < mappedPrime.length; i++) {
-    //     var idat = mappedPrime[i];
-    //     var text = draw.text(String(primeLenses[i])).font('anchor', 'middle').move(idat,60)
-    // }
-
-    // },
+    watch: {
+        guide() {
+            this.setFeaturedPosition()
+        }
+    },
 
     methods: {
         formatDate: function (date) {
@@ -155,6 +122,23 @@ export default {
                 "label": "visibility",
                 "data": this.guide.visibility == 0 ? 1 : 0
             })
+        },
+
+        setFeaturedPosition: function() {
+            // Check that there is any photo
+            if(this.guide.photos.length == 0)
+                return
+
+            // Check that there is some position available
+            for(var i=0; i<this.guide.photos.length; i++) {
+                var photo = this.guide.photos[i]
+                if(photo.latitude != ""){
+                    this.featuredPosition.latitude = photo.latitude
+                    this.featuredPosition.longitude = photo.longitude
+                    this.featuredPosition.valid = true
+                    return
+                }
+            }
         }
     },
 }
