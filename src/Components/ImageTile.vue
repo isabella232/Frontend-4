@@ -7,7 +7,7 @@
 
         <div class="description">
             <span class="title">{{image.title}}</span>
-            <span class="owner">{{image.owner}} - all rights reserved</span>
+            <span class="owner">{{image.author || image.ownername}} - all rights reserved</span>
         </div>
     </div>
 </template>
