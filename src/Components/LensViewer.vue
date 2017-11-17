@@ -75,6 +75,7 @@ export default {
     },
     mounted () {
         this.draw = SVG('lensDensityPlot')
+        this.draw.viewbox(0,0,1500,80)
         this.mappedPrime = lens.remapData(this.primeLenses)
 
         // Compute & render
