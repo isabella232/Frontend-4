@@ -58,7 +58,6 @@ export default {
 
             for(let i = 0; i < this.lensFocal.length; i++) {
                 var idat = this.lensFocal[i];
-                console.log(idat)
                 if(idat.length == 1){
                     var box = this.draw.rect(10,50).move(idat[0]-5,0).attr('fill-opacity', opacity).bbox()
                 }

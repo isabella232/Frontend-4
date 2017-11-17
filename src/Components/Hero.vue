@@ -6,7 +6,6 @@
 
 <script>
 var images = require.context('../assets/', false, /\.jpg$/)
-console.log(images)
 
 export default {
     name: 'hero',

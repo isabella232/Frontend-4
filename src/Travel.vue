@@ -36,8 +36,6 @@ export default {
   },
   methods: {
     guideSelected: function (guide) {
-      console.log("Hover")
-      console.log(guide)
       this.guide = guide
     }
   }

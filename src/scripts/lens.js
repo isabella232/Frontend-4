@@ -10,7 +10,6 @@ export default {
         var newData = [];
         for(var i = 0; i < data.length; i++) {
             var idat = data[i];
-            console.log(idat)
             if(idat.length == undefined)
                 newData.push(this.mapFunction(idat)*100)
             else if(idat.length == 1)

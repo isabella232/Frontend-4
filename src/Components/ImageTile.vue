@@ -29,7 +29,6 @@ export default {
             }
         },
         tileAction: function(){
-            console.log("clicked")
             this.$emit("selected")
         }
     }
