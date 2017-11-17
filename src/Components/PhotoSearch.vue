@@ -2,7 +2,7 @@
 <div id="search-view" >
     <searchbar  v-bind:button="true" v-on:search="searchImage"></searchbar>
     <div id="search-results"v-masonry transition-duration="0.3s" item-selector=".item">
-        <image-tile  v-masonry-tile v-for="(photo, index) in photos" v-bind:key="index" v-bind:image.sync="photo" v-bind:selection="true" v-on:selected="addImage(photo)"></image-tile>
+        <image-tile  v-masonry-tile v-for="(photo, index) in photos" v-bind:key="index" v-bind:image.sync="photo" v-bind:selection="alreadyIn(photo)" v-on:selected="addImage(photo)"></image-tile>
     </div>
 </div>
 </template>
@@ -23,7 +23,8 @@ export default {
         searchbar
     },
     props: [
-        "guideID"
+        "guideID",
+        "IDList"
     ],
     data () {
         return {
@@ -45,14 +46,28 @@ export default {
         },
 
         addImage:function(photo) {
-            api.AddPhoto(this, function(){}, function(){}, {
-                "guide": this.guideID,
-                "image": {
-                "origin": "flickr",
-                "id": photo.id
+            api.AddPhoto(
+                this,
+                data => {
+                    // Send the image to the parent for a smoother experience
+                    this.$emit("added", data.body)
                 }
-            })
+                , function(){}, {
+                    "guide": this.guideID,
+                    "image": {
+                        "origin": "flickr",
+                        "id": photo.id
+                    }
+                }
+            )
         },
+
+        alreadyIn:function(image) {
+            if(this.IDList.indexOf(image.id) != -1)
+                return true
+            else
+                return false
+        }
     }
 
 }

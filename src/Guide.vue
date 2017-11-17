@@ -12,10 +12,10 @@
       </ul>
     </nav>
     <div v-if="view=='view'" id="photo" v-masonry transition-duration="0.3s" item-selector=".item">
-      <image-tile  v-masonry-tile v-for="(image, index) in guide.photos" v-bind:key="index" v-bind:image.sync="image" v-bind:selection="true" v-on:selected="removePhoto(image)"></image-tile>
+      <image-tile  v-masonry-tile v-for="(image, index) in guide.photos" v-bind:key="index" v-bind:image.sync="image" v-bind:selection="true" v-on:removed="removePhoto(image)" view="true"></image-tile>
     </div>
 
-    <photoSearch v-if="view=='search'" :guideID="guide.id"></photoSearch>
+    <photoSearch v-if="view=='search'" :guideID="guide.id" v-on:added="addPhoto" :IDList="photoIDList"></photoSearch>
 
     <div v-if="view=='map' && hasMapData" id="map-view" >
       <mapView :photos="guide.photos"></mapView>
@@ -78,18 +78,36 @@ export default {
           }
       }
       return false
+    },
+    photoIDList: function(){
+      var IDList = []
+
+      for(var i=0; i<this.guide.photos.length; i++){
+        IDList.push(this.guide.photos[i].flickr_id)
+      }
+
+      return IDList
     }
   },
 
   methods: {
-    removePhoto: function(id){
+    removePhoto: function(image){
       api.RemovePhoto(this, function(){}, function(){}, {
         "guide": this.guideID,
         "image": {
           "origin": "flickr",
-          "id": id.flickr_id
+          "id": image.flickr_id
         }
       })
+
+      this.guide.photos.splice(this.guide.photos.indexOf(image), 1)
+                      var that=this
+                setTimeout(function(){
+                    that.$redrawVueMasonry()
+                }, 1)
+    },
+    addPhoto: function(photo) {
+      this.guide.photos.push(photo)
     }
   }
 }

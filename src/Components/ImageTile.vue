@@ -1,9 +1,11 @@
 <template>
-    <div class="item" v-on:click="tileAction" v-bind:fid="image.flickr_id">
-        <span class="indicator" :class="image.Selected?'selected':null">
+    <div class="item" v-on:click="selectAction" v-bind:fid="image.flickr_id">
+        <span v-if="!view" class="indicator" :class="selection?'selected':null">
             <i v-if="image.latitude != 0" class="fa fa-map" aria-hidden="true"></i>
         </span>
         <img v-bind:src="getUrl(image)">
+
+        <div v-if="view" class="remove" v-on:click="removeAction" ><i class="fa fa-trash" aria-hidden="true"></i></div>
 
         <div class="description">
             <span class="title">{{image.title}}</span>
@@ -15,7 +17,7 @@
 <script>
 export default {
     name: 'image-tile',
-    props: ['image', 'selection'],
+    props: ['image', 'selection', 'view'],
     data () {
         return {
         }
@@ -28,8 +30,11 @@ export default {
                 return 'https://farm'+ image.farm +'.staticflickr.com/'+  image.server +'/'+ image.id +'_'+ image.secret +'.jpg'
             }
         },
-        tileAction: function(){
+        selectAction: function(){
             this.$emit("selected")
+        },
+        removeAction: function(){
+            this.$emit("removed")
         }
     }
 }
@@ -38,6 +43,12 @@ export default {
 <style lang="scss">
 .item {
     display: block;
+
+    .remove {
+        display: none;
+        position: absolute;
+        cursor: pointer;
+    }
 
     &:hover {
         .description {
@@ -49,6 +60,17 @@ export default {
             bottom: 0;
             height: 60px;
             background-color: #4b4b4b;
+        }
+
+        .remove {
+            display: block;
+            top: 10px;
+            left: 10px;
+            margin: 0.2em;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 2em;
+            text-shadow: 2px 2px black;
         }
     }
 

@@ -1,7 +1,7 @@
 <template>
     <div class="form" :class="button?'has-button':null">
         <input class="text" type="text" name="keywords" v-model="keywords">
-        <input v-if="button" class="button" type="submit" value="Submit" v-on:click="onClick">
+        <input v-if="button" class="button" type="submit" value="Submit" v-on:click="onClick" @keyup.enter="onClick">
     </div>
 </template>
 
