@@ -22,6 +22,8 @@ var ENTRYPOINT_PHOTO_SELECTED = "/photos/selected"
 
 var ENTRYPOINT_PHOTO_SEARCH = "/photos/search"
 
+var ENTRYPOINT_WEATHER = "/weather"
+
 function Get(context, entrypoint, success, failure, headers, args) {
     let url =  URL_ORIGIN + URL_API_VERSION + entrypoint
 
@@ -124,5 +126,10 @@ export default {
     },
     RemovePhoto(context, success, failure, data) {
         Delete(context, ENTRYPOINT_PHOTO_SELECTED, success, failure, auth.getAuthHeader(), data)
+    },
+
+    // Weather related API
+    GetGuideWeather(context, success, failure, data) {
+        Get(context, ENTRYPOINT_WEATHER, success, failure, auth.getAuthHeader(), data)
     }
 }

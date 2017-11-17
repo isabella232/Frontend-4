@@ -8,10 +8,7 @@
 
         <section class="infoSection">
             <h3>Weather</h3>
-        </section>
-
-        <section class="infoSection">
-            <h3>Sun</h3>
+            <weatherView :id="guide.id" :location="featuredPosition"></weatherView>
         </section>
     </div>
     <div id="guideShortInfo">
@@ -68,6 +65,7 @@ import api from '../api'
 import lens from '../scripts/lens'
 import SVG from 'svg.js'
 import lensViewer from './LensViewer.vue'
+import weatherView from './WeatherView.vue'
 
 export default {
     name: 'guideinfo',
@@ -75,7 +73,8 @@ export default {
       'v-map': Vue2Leaflet.Map,
       'v-tilelayer' :Vue2Leaflet.TileLayer,
       'v-marker': Vue2Leaflet.Marker,
-      lensViewer
+      lensViewer,
+      weatherView
     },
     props: ['guide'],
     data () {
