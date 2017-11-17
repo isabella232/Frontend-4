@@ -62,7 +62,7 @@ export default {
 }
 
 span.button {
-    background-color: #ddddddbb;
+    background-color: rgba(221,221,221,0.6);
     padding: 1em;
     margin: 1em;
     border-radius: 1.6em;
@@ -93,7 +93,7 @@ span.button {
     display: inline-block;
     width: 100%;
     text-align: left;
-    color: #ccccccdd;
+    color: rgba(204,204,204,0.6);
     font-size: 1.5em;
     margin-left: 1.1em;
     margin-top: 2em;
