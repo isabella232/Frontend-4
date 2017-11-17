@@ -125,18 +125,21 @@ export default {
         },
 
         setFeaturedPosition: function() {
-            // Check that there is any photo
-            if(this.guide.photos.length == 0)
-                return
-
-            // Check that there is some position available
-            for(var i=0; i<this.guide.photos.length; i++) {
-                var photo = this.guide.photos[i]
-                if(photo.latitude != ""){
-                    this.featuredPosition.latitude = photo.latitude
-                    this.featuredPosition.longitude = photo.longitude
-                    this.featuredPosition.valid = true
+            if(this.guide != "new")
+            {
+                // Check that there is any photo
+                if(this.guide.photos.length == 0)
                     return
+
+                // Check that there is some position available
+                for(var i=0; i<this.guide.photos.length; i++) {
+                    var photo = this.guide.photos[i]
+                    if(photo.latitude != ""){
+                        this.featuredPosition.latitude = photo.latitude
+                        this.featuredPosition.longitude = photo.longitude
+                        this.featuredPosition.valid = true
+                        return
+                    }
                 }
             }
         }

@@ -31,7 +31,7 @@ export default {
   },
   data () {
     return {
-      guide:{}
+      guide:"new"
     }
   },
   methods: {
