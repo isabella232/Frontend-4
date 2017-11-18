@@ -6,9 +6,9 @@
 
         <div id="sigin-form" v-if="signin">
             <label class="label" for="username">Username</label>
-            <input class="input-text" type="text" id="username" v-model="credentials.username"/>
+            <input class="input-text" type="text" id="username" v-model="credentials.username" v-on:keyup.enter="submit"/>
             <label class="label" for="password">Password</label>
-            <input class="input-text" type="password" id="password" v-model="credentials.password"/>
+            <input class="input-text" type="password" id="password" v-model="credentials.password" v-on:keyup.enter="submit"/>
         </div>
 
         <span class="button" id="back" v-if="signin || signup" v-on:click="signin = signup = false">Back</span>
