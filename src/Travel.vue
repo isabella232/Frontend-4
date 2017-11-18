@@ -7,9 +7,9 @@
     <div id="guides">
       <div id="search">
         <i class="fa fa-search" aria-hidden="true"></i>
-        <input type="text" placeholder="Search...">
+        <input type="text" placeholder="Search..." v-model="keywords">
       </div>
-      <guides v-on:guideSelected="guideSelected"></guides>
+      <guides v-on:guideSelected="guideSelected" :keywords="keywords"></guides>
     </div>
     <guideinfo :guide="this.guide"></guideinfo>
   </div>
@@ -31,7 +31,8 @@ export default {
   },
   data () {
     return {
-      guide:"new"
+      guide:"new",
+      keywords:""
     }
   },
   methods: {

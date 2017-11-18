@@ -5,7 +5,7 @@
         <input type="text" placeholder="Create a new guide" class="title input" v-model="newguide">
         <p v-if="newguide" class="title button" v-on:click="createGuide">Create!</p>
       </swiper-slide>
-      <swiper-slide v-for="(guide, index) in guideByDate" v-bind:key="index" class="guide" v-on:mouseover="onGuideSelected(guide)">
+      <swiper-slide v-for="(guide, index) in sortedGuides" v-bind:key="index" class="guide" v-on:mouseover="onGuideSelected(guide)">
         <router-link :to="{ name: 'guide', params: { guideID: guide.id, view: 'view' }}">
           <div class="bg" v-if="guide.photos[0]" v-bind:style='{backgroundImage: "url(" + guide.photos[0].url + ")", }'></div>
           <h3 class="title">{{guide.title}}</h3>
@@ -31,6 +31,7 @@ export default {
     swiperSlide
   },
 
+  props: ['keywords'],
   data () {
     return {
       guides: [],
@@ -62,6 +63,23 @@ export default {
       return this.guides.sort((a,b) =>
         new Date(a.last_edited) < new Date(b.last_edited)
       )
+    },
+    sortedGuides: function() {
+      if(this.keywords != ""){
+        var sortedGuides = []
+        var dateSortedGuides = this.guideByDate
+
+        for(var i=0; i<dateSortedGuides.length; i++){
+          var guide = dateSortedGuides[i]
+          if(guide.title.toLowerCase().includes(this.keywords.toLowerCase()))
+            sortedGuides.push(guide)
+        }
+
+        return sortedGuides
+
+      }
+
+      return this.guideByDate
     }
   },
 
