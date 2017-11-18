@@ -3,6 +3,7 @@
     <searchbar v-bind:button="true" v-on:search="searchImage"></searchbar>
     <div id="search-results" class="flexbin">
         <image-tile v-for="(photo, index) in photos" v-bind:key="index" v-bind:image.sync="photo" v-bind:selection="alreadyIn(photo)" v-on:selected="addImage(photo)"></image-tile>
+        <infinite-loading @infinite="infiniteHandler" v-if="photoLoaded"></infinite-loading>
     </div>
 </div>
 </template>
@@ -12,12 +13,14 @@ import imageTile from './ImageTile.vue'
 import searchbar from './SearchBar.vue'
 import Vue from 'vue'
 import api from '../api'
+import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
     name: 'searchPhoto',
     components: {
         imageTile,
-        searchbar
+        searchbar,
+        InfiniteLoading
     },
     props: [
         "guideID",
@@ -25,15 +28,25 @@ export default {
     ],
     data () {
         return {
-            photos: []
+            photos: [],
+            photoLoaded: false,
+            currentPage: 1,
+            currentTags: ""
         }
     },
     methods: {
         searchImage: function (tags) {
             this.photos = []
+            this.currentTags = tags
+            this.currentPage = 1
             api.SearchPhoto(this, data => {
                 // get body data
                 this.photos =  data.body.photos.photo
+
+                setTimeout(() => {
+                    this.photoLoaded = true
+                },1000)
+
             }, function(){}, {keywords: tags.split(" ")})
         },
 
@@ -59,7 +72,23 @@ export default {
                 return true
             else
                 return false
-        }
+        },
+
+        infiniteHandler($state) {
+            console.log("End of the line")
+            this.currentPage++
+
+            api.SearchPhoto(this, data => {
+                // get body data
+                this.photos = this.photos.concat(data.body.photos.photo)
+
+                setTimeout(() => {
+                    $state.loaded()
+                    this.photoLoaded = true
+                },1000)
+
+            }, function(){}, {keywords: this.currentTags.split(" "), page: this.currentPage})
+        },
     }
 
 }
