@@ -82,10 +82,12 @@ export default {
                 // get body data
                 this.photos = this.photos.concat(data.body.photos.photo)
 
+                if(data.body.photos.photo.length==0)
+                    this.photoLoaded = false
+
                 setTimeout(() => {
                     $state.loaded()
-                    this.photoLoaded = true
-                },1000)
+                },100)
 
             }, function(){}, {keywords: this.currentTags.split(" "), page: this.currentPage})
         },
@@ -96,5 +98,9 @@ export default {
 
 <style lang="scss">
 @import "../styles/flexbin.scss";
+
+.infinite-loading-container {
+    width: 100%;
+}
 </style>
 
