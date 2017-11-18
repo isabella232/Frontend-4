@@ -54,7 +54,6 @@ export default {
         .description {
             display: block;
             position: absolute;
-            margin: 0.3em;
             left: 0;
             right: 0;
             bottom: 0;
@@ -64,12 +63,12 @@ export default {
 
         .remove {
             display: block;
-            top: 10px;
-            left: 10px;
-            margin: 0.2em;
+            top: 0px;
+            left: 0px;
+            padding: 0.5em;
             font-weight: normal;
             font-style: normal;
-            font-size: 2em;
+            font-size: 1.5em;
             text-shadow: 2px 2px black;
         }
     }
@@ -83,7 +82,7 @@ export default {
         font-family: FontAwesome;
         font-weight: normal;
         font-style: normal;
-        font-size: 2em;
+        font-size: 1.5em;
         text-shadow: 2px 2px black;
 
         &:before {
@@ -110,10 +109,5 @@ export default {
             right: 0.5em;
         }
     }
-}
-
-img {
-    width: 100%;
-    height: auto;
 }
 </style>
