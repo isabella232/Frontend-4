@@ -2,7 +2,7 @@
   <div id="guide-page">
       <navbar></navbar>
 
-    <hero :title="guide.title" image="bg2.jpg" left="true"></hero>
+    <heroMap :title="guide.title" :guide="guide"></heroMap>
 
     <nav id="app-nav">
       <ul>
@@ -37,7 +37,7 @@ import searchbar from './Components/SearchBar.vue'
 import auth from './auth'
 import Vue from 'vue'
 import Vue2Leaflet from 'vue2-leaflet';
-import hero from './Components/Hero.vue'
+import heroMap from './Components/HeroMap.vue'
 import photoSearch from './Components/PhotoSearch.vue'
 import mapView from './Components/MapView.vue'
 import infoView from './Components/InfoView.vue'
@@ -51,7 +51,7 @@ export default {
       'v-map': Vue2Leaflet.Map,
       'v-tilelayer' :Vue2Leaflet.TileLayer,
       'v-marker': Vue2Leaflet.Marker,
-      hero,
+      heroMap,
       photoSearch,
       mapView,
       infoView
