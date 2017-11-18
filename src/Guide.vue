@@ -6,6 +6,7 @@
 
     <nav id="app-nav">
       <ul>
+        <li><router-link to="info">Info</router-link></li>
         <li><router-link to="view">View</router-link></li>
         <li><router-link to="search" v-if="authenticated">Search</router-link></li>
         <li><router-link to="map" v-if="hasMapData">Map</router-link></li>
@@ -19,6 +20,11 @@
 
     <div v-if="view=='map' && hasMapData" id="map-view" >
       <mapView :photos="guide.photos"></mapView>
+    </div>
+
+
+    <div v-if="view=='info'" id="info-view">
+      <infoView :guide="guide"></infoView>
     </div>
   </div>
 </template>
@@ -34,6 +40,7 @@ import Vue2Leaflet from 'vue2-leaflet';
 import hero from './Components/Hero.vue'
 import photoSearch from './Components/PhotoSearch.vue'
 import mapView from './Components/MapView.vue'
+import infoView from './Components/InfoView.vue'
 
 export default {
   name: 'guide',
@@ -46,7 +53,8 @@ export default {
       'v-marker': Vue2Leaflet.Marker,
       hero,
       photoSearch,
-      mapView
+      mapView,
+      infoView
   },
   props: ['guideID', 'view'],
   data () {
@@ -137,7 +145,7 @@ export default {
     margin: 2em auto;
 }
 
-#photo, #search-view {
+#photo, #search-view, #info-view {
   width: 82%;
   margin: 2em auto;
 }

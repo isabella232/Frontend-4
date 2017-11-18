@@ -6,7 +6,7 @@
         <p v-if="newguide" class="title button" v-on:click="createGuide">Create!</p>
       </swiper-slide>
       <swiper-slide v-for="(guide, index) in sortedGuides" v-bind:key="index" class="guide" v-on:mouseover="onGuideSelected(guide)">
-        <router-link :to="{ name: 'guide', params: { guideID: guide.id, view: 'view' }}">
+        <router-link :to="{ name: 'guide', params: { guideID: guide.id, view: 'info' }}">
           <div class="bg" v-if="guide.photos[0]" v-bind:style='{backgroundImage: "url(" + guide.photos[0].url + ")", }'></div>
           <h3 class="title">{{guide.title}}</h3>
         </router-link>
