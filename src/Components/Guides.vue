@@ -127,8 +127,11 @@ export default {
 
     border: 1px solid #333;
 
-    &.swiper-slide-active .bg{
-      filter: sepia(20%) saturate(70%) brightness(0.7);
+    &.swiper-slide-active{
+      border: 1px solid #ccc;
+      .bg{
+        filter: sepia(20%) saturate(70%) brightness(0.7);
+      }
     }
 
     .bg {
@@ -140,7 +143,7 @@ export default {
       height: 110%;
       top: -5%;
       left: -5%;
-      z-index: 1;
+      z-index: -1;
     }
 
     .title {
