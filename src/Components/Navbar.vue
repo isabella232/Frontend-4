@@ -57,6 +57,7 @@ export default {
     display: flex;
     align-items: center;
     color: #333;
+    border: 1px solid #aaa;
 
     z-index: 999;
 
