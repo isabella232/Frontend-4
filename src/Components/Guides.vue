@@ -7,7 +7,7 @@
       </swiper-slide>
       <swiper-slide v-for="(guide, index) in sortedGuides" v-bind:key="index" class="guide" v-on:mouseover="onGuideSelected(guide)">
         <router-link :to="{ name: 'guide', params: { guideID: guide.id, view: 'info' }}">
-          <div class="bg" v-if="guide.photos[0]" v-bind:style='{backgroundImage: "url(" + guide.photos[0].url + ")", }'></div>
+          <div class="bg" v-bind:style='{backgroundImage: "url(" + guide.featured_image + ")", }'></div>
           <h3 class="title">{{guide.title}}</h3>
         </router-link>
       </swiper-slide>
@@ -128,7 +128,7 @@ export default {
     border: 1px solid #333;
 
     &.swiper-slide-active{
-      border: 1px solid #ccc;
+      border: 1px solid #F39C12;
       .bg{
         filter: sepia(20%) saturate(70%) brightness(0.7);
       }

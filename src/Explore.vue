@@ -7,7 +7,7 @@
     <section id="guides">
         <div v-for="(guide, index) in guideByDate" v-bind:key="index" class="guide">
             <router-link :to="{ name: 'guide', params: { guideID: guide.id, view: 'view' }}">
-                <div class="bg" v-if="guide.photos[0]" v-bind:style='{backgroundImage: "url(" + guide.photos[0].url + ")", }'></div>
+                <div class="bg" v-bind:style='{backgroundImage: "url(" + guide.featured_image + ")", }'></div>
                 <h3 class="title">{{guide.title}}</h3>
             </router-link>
         </div>

@@ -9,7 +9,8 @@ import SVG from 'svg.js'
 export default {
     name: 'lensViewer',
     props: [
-        'photos'
+        'photos',
+        'selected'
     ],
     data () {
         return {
@@ -30,6 +31,7 @@ export default {
             ],
             mappedPrime: [],
             lensFocal: [],
+            selectedFocal: [],
             draw: {}
         }
     },
@@ -47,6 +49,14 @@ export default {
 
             // Remap all the focal length to the exponential counterparts
             this.lensFocal = lens.remapData(this.lensFocal)
+
+            if(this.selected){
+                for(let i = 0; i<this.selected.length; i++){
+                    let selected = this.selected[i]
+                    this.selectedFocal.push(selected.split(" "))
+                }
+                this.selectedFocal = lens.remapData(this.selectedFocal)
+            }
         },
 
         renderView: function(){
@@ -56,6 +66,19 @@ export default {
             // Draw the view
             var opacity = 0.1
 
+            // Render selected focals
+            for(let i = 0; i < this.selectedFocal.length; i++) {
+                var idat = this.selectedFocal[i];
+                if(idat.length == 1){
+                    var box = this.draw.rect(10,50).move(idat[0]-5,0).fill({'color': "#F39C12"})
+                }
+                else {
+                    var box = this.draw.rect((idat[1] - idat[0])+10,50).move(idat[0]-5,0).fill({'color': "#F39C12"})
+                }
+
+            }
+
+            // Render unselected focals
             for(let i = 0; i < this.lensFocal.length; i++) {
                 var idat = this.lensFocal[i];
                 if(idat.length == 1){
@@ -84,6 +107,11 @@ export default {
     },
     watch: {
         photos(){
+            // Compute & render
+            this.computeLens()
+            this.renderView()
+        },
+        selected(){
             // Compute & render
             this.computeLens()
             this.renderView()

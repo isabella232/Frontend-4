@@ -17,8 +17,6 @@
 
         <p class="section">Change password</p>
 
-
-
         <div class="info">
           <span class="label">Old password</span><input type="password" class="data" placeholder="*******" v-model="passwords[0]">
         </div>
@@ -31,6 +29,11 @@
 
         <input class="button" type="submit" value="Submit changes" v-on:click="submitInfo">
     </div>
+
+    <div id="gear-data">
+        <p class="section">My gear</p>
+        <accountGear></accountGear>
+    </div>
   </div>
 </template>
 
@@ -39,12 +42,14 @@ import api from './api'
 
 import navbar from './Components/Navbar.vue'
 import hero from './Components/Hero.vue'
+import accountGear from './Components/AccountGear.vue'
 
 export default {
   name: 'account',
   components:{
     navbar,
-    hero
+    hero,
+    accountGear
   },
   data () {
     return {
@@ -54,7 +59,7 @@ export default {
         "", // Previous
         "", // New
         ""  // New bis
-      ]
+      ],
     }
   },
   mounted: function () {
@@ -91,7 +96,7 @@ export default {
 
 #account-page {
 
-  #account-data {
+  #account-data, #gear-data {
     color: #333;
     display: flex;
     justify-content: center;

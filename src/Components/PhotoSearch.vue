@@ -58,7 +58,7 @@ export default {
                     this.$emit("added", data.body)
                 }
                 , function(){}, {
-                    "guide": this.guideID,
+                    "guide_id": this.guideID,
                     "image": {
                         "origin": "flickr",
                         "id": photo.id
