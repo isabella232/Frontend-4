@@ -1,29 +1,31 @@
 <template>
     <nav id="navigation-panel">
-        <span class="logo">
-            <h1>
-                <router-link to="/">
-                    <strong>S</strong>urveying <strong>M</strong>armot
-                </router-link>
-            </h1>
-        </span>
-        <ul class="links">
-            <li>
-                <router-link to="/explore">Explore</router-link>
-            </li>
-            <li v-if="authenticated">
-                <router-link to="/travel">Travel</router-link>
-            </li>
-            <li v-if="authenticated">Achievements</li>
-        </ul>
-        <ul class="user">
-            <li v-if="!authenticated" @click="$modal.show('login')">Login</li>
-            <li class="button" v-if="!authenticated" @click="$modal.show('signup')">Sign up</li>
-            <li v-if="authenticated">
-                <router-link to="/account">Account</router-link>
-            </li>
-            <li class="button" v-if="authenticated" v-on:click="logout">Log out</li>
-        </ul>
+        <div>
+            <span class="logo">
+                <h1>
+                    <router-link to="/">
+                        <strong>S</strong>urveying <strong>M</strong>armot
+                    </router-link>
+                </h1>
+            </span>
+            <ul class="links">
+                <li>
+                    <router-link to="/explore">Explore</router-link>
+                </li>
+                <li v-if="authenticated">
+                    <router-link to="/travel">Travel</router-link>
+                </li>
+                <li v-if="authenticated">Achievements</li>
+            </ul>
+            <ul class="user">
+                <li v-if="!authenticated" @click="$modal.show('login')">Login</li>
+                <li class="button" v-if="!authenticated" @click="$modal.show('signup')">Sign up</li>
+                <li v-if="authenticated">
+                    <router-link to="/account">Account</router-link>
+                </li>
+                <li class="button" v-if="authenticated" v-on:click="logout">Log out</li>
+            </ul>
+        </div>
     </nav>
 </template>
 
@@ -50,84 +52,87 @@ export default {
 <style lang="scss">
 @import "../styles/colors.scss";
 #navigation-panel {
-    width: 90%;
-    max-width: 1900px;
-    height: 3.5em;
+    width: 100%;
     left: 0;
     right: 0;
-    // background-color: white;
     position: fixed;
-    margin:  1em auto;
-    padding: 0 3em;
-    display: flex;
-    align-items: center;
-    color: white;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0) 100%);
 
     z-index: 999;
 
-    .logo {
-        font-size: 1.5em;
+    >div{
+        width: 90%;
+        max-width: 1900px;
+        height: 3.5em;
+        margin:  1em auto;
+        padding: 0 3em;
         display: flex;
         align-items: center;
+        color: white;
 
-        h1 {
-            font-size: 0.8em;
-            margin-left: 1em;
-            font-weight: normal;
+        .logo {
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
 
-            img{
-                height: 2em;
-                margin-right: 0.5em;
-            }
+            h1 {
+                font-size: 0.8em;
+                margin-left: 1em;
+                font-weight: normal;
 
-            strong{
-                color: $primary-color-1;
-                font-size: 1.3em;
-            }
+                img{
+                    height: 2em;
+                    margin-right: 0.5em;
+                }
 
-            a {
-                display: flex;
-                align-items: center;
-                color: white;
-            }
-        }
-    }
+                strong{
+                    font-size: 1.3em;
+                }
 
-    .links, .user {
-        list-style: none;
-        font-weight: bold;
-        order: 2;
-        display: flex;
-        align-items: center;
-
-        li {
-            float: left;
-            margin-left: 1em;
-
-            a {
-                color: white;
-
-                &:hover {
-                    color: $primary-color-1;
+                a {
+                    display: flex;
+                    align-items: center;
+                    color: white;
                 }
             }
         }
-    }
 
-    .user {
-        order: 2;
-        margin-left: auto;
+        .links, .user {
+            list-style: none;
+            font-weight: bold;
+            order: 2;
+            display: flex;
+            align-items: center;
+
+            li {
+                float: left;
+                margin-left: 1em;
+
+                a {
+                    color: white;
+
+                    &:hover {
+                        color: $primary-color-1;
+                    }
+                }
+            }
+        }
+
+        .user {
+            order: 2;
+            margin-left: auto;
 
 
-        .button {
-            padding: 0.5em;
-            border: 2px solid $primary-color-1;
-            cursor: pointer;
-            color: $primary-color-1;
+            .button {
+                padding: 0.5em;
+                border: 2px solid $primary-color-1;
+                cursor: pointer;
+                color: $primary-color-1;
 
-            &:hover{
-                background-color: $primary-color-1;
-                color: white;
+                &:hover{
+                    background-color: $primary-color-1;
+                    color: white;
+                }
             }
         }
     }
