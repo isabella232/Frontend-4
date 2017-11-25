@@ -55,7 +55,6 @@ export default {
     height: 3.5em;
     left: 0;
     right: 0;
-    // background-color: white;
     position: fixed;
     margin:  1em auto;
     padding: 0 3em;
@@ -81,7 +80,6 @@ export default {
             }
 
             strong{
-                color: $primary-color-1;
                 font-size: 1.3em;
             }
 
