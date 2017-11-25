@@ -8,9 +8,21 @@ var URL_ORIGIN = (IS_HEROKU ? URL_ORIGIN_HEROKU : URL_ORIGIN_LOCAL)
 
 var URL_API_VERSION = "/api/v1"
 
-var ENTRYPOINT_USER_LOGIN = "/users/login"
+// User related entrypoints
+var ENTRYPOINT_USER_AUTHENTICATION = "/user/auth"
+var ENTRYPOINT_USER_ADMINISTRATION = "/user"
+var ENTRYPOINT_USER_INFORMATION = "/user/info"
+
+// Guide related entrypoints
+var ENTRYPOINT_GUIDE_PUBLIC_LISTING = "/public/guides"
+var ENTRYPOINT_GUIDE_LISTING = "/guides"
+var ENTRYPOINT_GUIDE_INTERACTION = "/guide"
+var ENTRYPOINT_GUIDE_PHOTO_INTERACTION = "/guide/photo"
+
 
 var ENTRYPOINT_USER_INFO = "/user"
+
+var ENTRYPOINT_USER_GEAR = "/user/gear"
 
 var ENTRYPOINT_GUIDE = "/guide"
 
@@ -41,7 +53,7 @@ function Get(context, entrypoint, success, failure, headers, args) {
     }
 
     context.$http.get(url, {
-        headers: headers
+        headers: headers,
     }).then(
         data => { success(data) },
         response => { failure(response) }
@@ -66,6 +78,15 @@ function Put(context, entrypoint, success, failure, headers, body) {
     )
 }
 
+function Patch(context, entrypoint, success, failure, headers, body) {
+    context.$http.patch( URL_ORIGIN + URL_API_VERSION + entrypoint, body, {
+        headers: headers
+    }).then(
+        data => { success(data) },
+        response => { failure(response) }
+    )
+}
+
 function Delete(context, entrypoint, success, failure, headers, body) {
     context.$http.delete( URL_ORIGIN + URL_API_VERSION + entrypoint, {
         headers: headers,
@@ -77,44 +98,63 @@ function Delete(context, entrypoint, success, failure, headers, body) {
 }
 
 export default {
-    // User related API
+    // User related api
+    ValidateToken(context, success, failure) {
+        Get(context, ENTRYPOINT_USER_AUTHENTICATION, success, failure, auth.getAuthHeader())
+    },
     LoginUser(context, creds, success, failure) {
-        Get(context, ENTRYPOINT_USER_LOGIN, success, failure, {
+        Post(context, ENTRYPOINT_USER_AUTHENTICATION, success, failure, {
             "Authorization": "Basic " + btoa(creds.username + ":" + creds.password)
         })
     },
     GetUserInfo(context, success, failure) {
-        Get(context, ENTRYPOINT_USER_INFO, success, failure, auth.getAuthHeader())
+        Get(context, ENTRYPOINT_USER_INFORMATION, success, failure, auth.getAuthHeader())
     },
     UpdateUserInfo(context, success, failure, data) {
-        Put(context, ENTRYPOINT_USER_INFO, success, failure, auth.getAuthHeader(), data)
+        Patch(context, ENTRYPOINT_USER_INFORMATION, success, failure, auth.getAuthHeader(), data)
+    },
+    Signup(context, success, failure, data) {
+        Post(context, ENTRYPOINT_USER_ADMINISTRATION, success, failure, {}, data)
     },
 
+    // User gear related api
+    GetUserGear(context, success, failure) {
+        Get(context, ENTRYPOINT_USER_GEAR, success, failure, auth.getAuthHeader())
+    },
+    AddUserGear(context, success, failure, data) {
+        Post(context, ENTRYPOINT_USER_GEAR, success, failure, auth.getAuthHeader(), data)
+    },
+
+
     // Guide related API
+
     ListGuides(context, success, failure) {
-        Get(context, ENTRYPOINT_GUIDES, success, failure, auth.getAuthHeader())
+        Get(context, ENTRYPOINT_GUIDE_LISTING, success, failure, auth.getAuthHeader())
     },
 
     CreateGuide(context, success, failure, data) {
-        Post(context, ENTRYPOINT_GUIDES, success, failure, auth.getAuthHeader(), data)
+        Post(context, ENTRYPOINT_GUIDE_INTERACTION, success, failure, auth.getAuthHeader(), data)
     },
 
     DeleteGuide(context, success, failure, data) {
-        Delete(context, ENTRYPOINT_GUIDE, success, failure, auth.getAuthHeader(), data)
+        Delete(context, ENTRYPOINT_GUIDE_INTERACTION, success, failure, auth.getAuthHeader(), data)
     },
 
     UpdateGuide(context, success, failure, data) {
-        Put(context, ENTRYPOINT_GUIDE, success, failure, auth.getAuthHeader(), data)
+        Patch(context, ENTRYPOINT_GUIDE_INTERACTION, success, failure, auth.getAuthHeader(), data)
     },
 
     GetPublicGuides(context, success, failure) {
-        Get(context, ENTRYPOINT_GUIDES_PUBLIC, success, failure, {})
+        Get(context, ENTRYPOINT_GUIDE_PUBLIC_LISTING, success, failure, {})
     },
 
     GetGuidePhoto(context, success, failure, data) {
-        Get(context, ENTRYPOINT_GUIDE, success, failure, auth.getAuthHeader(), data)
+        Get(context, ENTRYPOINT_GUIDE_PHOTO_INTERACTION, success, failure, auth.getAuthHeader(), data)
     },
 
+    GetGuideInfo(context, success, failure, data) {
+        Get(context, ENTRYPOINT_GUIDE_INTERACTION, success, failure, auth.getAuthHeader(), data)
+    },
 
     SearchPhoto(context, success, failure, data) {
         Get(context, ENTRYPOINT_PHOTO_SEARCH, success, failure, auth.getAuthHeader(), data)
@@ -122,10 +162,10 @@ export default {
 
     // Photo related API
     AddPhoto(context, success, failure, data) {
-        Put(context, ENTRYPOINT_PHOTO_SELECTED, success, failure, auth.getAuthHeader(), data)
+        Post(context, ENTRYPOINT_GUIDE_PHOTO_INTERACTION, success, failure, auth.getAuthHeader(), data)
     },
     RemovePhoto(context, success, failure, data) {
-        Delete(context, ENTRYPOINT_PHOTO_SELECTED, success, failure, auth.getAuthHeader(), data)
+        Delete(context, ENTRYPOINT_GUIDE_PHOTO_INTERACTION, success, failure, auth.getAuthHeader(), data)
     },
 
     // Weather related API

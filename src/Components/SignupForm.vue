@@ -1,38 +1,40 @@
 <template>
-    <modal name="login" transition="pop-out" :width="400" :height="300" adaptative="true">
+    <modal name="signup" transition="pop-out" :width="400" :height="400">
         <div class="form">
-            <h3 class="title">Sign in</h3>
+            <h3 class="title">Sign up</h3>
             <input class="input-text" type="text" placeholder="Username" id="username" v-model="credentials.username" v-on:keyup.enter="submit"/>
+            <input class="input-text" type="text" placeholder="Email" id="password" v-model="credentials.email" v-on:keyup.enter="submit"/>
             <input class="input-text" type="password" placeholder="Password" id="password" v-model="credentials.password" v-on:keyup.enter="submit"/>
+            <input class="input-text" type="password" placeholder="Repeat Password" id="repassword" v-model="credentials.repassword" v-on:keyup.enter="submit"/>
+            <input class="input-text" type="text" placeholder="Beta code" id="code" v-model="credentials.code" v-on:keyup.enter="submit"/>
 
-            <span class="button" id="signin" v-on:click="submit">Sign in</span>
+            <span class="button" id="signin" v-on:click="submit">Sign up</span>
         </div>
     </modal>
 </template>
 
 <script>
-import auth from '../auth'
+import api from '../api'
 
 export default {
-    name: 'loginform',
+    name: 'signupform',
     components:{
     },
     data () {
         return {
             credentials: {
+                email: "",
                 username: "",
-                password: ""
+                password: "",
+                repassword: "",
+                code: ""
             }
         }
     },
     methods: {
         submit() {
-            var credentials = {
-                username: this.credentials.username,
-                password: this.credentials.password
-            }
-
-            auth.login(this, credentials)
+            if(this.credentials.password == this.credentials.repassword)
+                api.Signup(this, function(){}, function(){}, this.credentials)
         }
     }
 }

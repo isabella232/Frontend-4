@@ -2,7 +2,9 @@
     <nav id="navigation-panel">
         <span class="logo">
             <h1>
-                <router-link to="/">Photo Scout</router-link>
+                <router-link to="/">
+                    <strong>S</strong>urveying <strong>M</strong>armot
+                </router-link>
             </h1>
         </span>
         <ul class="links">
@@ -15,12 +17,12 @@
             <li v-if="authenticated">Achievements</li>
         </ul>
         <ul class="user">
-            <li v-if="!authenticated">Sign in</li>
-            <li v-if="!authenticated">Sign up</li>
+            <li v-if="!authenticated" @click="$modal.show('login')">Login</li>
+            <li class="button" v-if="!authenticated" @click="$modal.show('signup')">Sign up</li>
             <li v-if="authenticated">
                 <router-link to="/account">Account</router-link>
             </li>
-            <li v-if="authenticated" v-on:click="logout">Log out</li>
+            <li class="button" v-if="authenticated" v-on:click="logout">Log out</li>
         </ul>
     </nav>
 </template>
@@ -46,18 +48,20 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../styles/colors.scss";
 #navigation-panel {
-    width: 80vw;
+    width: 90%;
+    max-width: 1900px;
     height: 3.5em;
-    background-color: white;
+    left: 0;
+    right: 0;
+    // background-color: white;
     position: fixed;
-    margin: 1em 10vw;
-    border-radius: 2em;
+    margin:  1em auto;
     padding: 0 3em;
     display: flex;
     align-items: center;
-    color: #333;
-    border: 1px solid #aaa;
+    color: white;
 
     z-index: 999;
 
@@ -69,34 +73,42 @@ export default {
         h1 {
             font-size: 0.8em;
             margin-left: 1em;
-            font-weight: lighter;
+            font-weight: normal;
+
+            img{
+                height: 2em;
+                margin-right: 0.5em;
+            }
+
+            strong{
+                color: $primary-color-1;
+                font-size: 1.3em;
+            }
 
             a {
-                color: #333;
+                display: flex;
+                align-items: center;
+                color: white;
             }
         }
     }
 
     .links, .user {
         list-style: none;
+        font-weight: bold;
+        order: 2;
+        display: flex;
+        align-items: center;
 
         li {
             float: left;
             margin-left: 1em;
 
             a {
-                color: #333;
+                color: white;
 
                 &:hover {
-                    color: #8E44AD;
-                }
-            }
-
-            &:not(:first-child ) {
-                &:before {
-                    content: " ";
-                    border-left: 1px solid #ddd;
-                    margin-right: 1em;
+                    color: $primary-color-1;
                 }
             }
         }
@@ -105,7 +117,19 @@ export default {
     .user {
         order: 2;
         margin-left: auto;
-        color: #8E44AD;
+
+
+        .button {
+            padding: 0.5em;
+            border: 2px solid $primary-color-1;
+            cursor: pointer;
+            color: $primary-color-1;
+
+            &:hover{
+                background-color: $primary-color-1;
+                color: white;
+            }
+        }
     }
 }
 </style>

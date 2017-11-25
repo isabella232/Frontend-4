@@ -2,29 +2,29 @@
   <div id="guide-page">
       <navbar></navbar>
 
-    <heroMap :title="guide.title" :guide="guide"></heroMap>
+    <heroMap :title="guide.title" :guideLocation="guide.location"></heroMap>
 
-    <nav id="app-nav">
+    <nav id="app-nav" class="vertical" v-scroll="navScroll">
       <ul>
         <li><router-link to="info">Info</router-link></li>
         <li><router-link to="view">View</router-link></li>
         <li><router-link to="search" v-if="authenticated">Search</router-link></li>
-        <li><router-link to="map" v-if="hasMapData">Map</router-link></li>
+        <li><router-link to="map" v-if="guide.location.latitude">Map</router-link></li>
       </ul>
     </nav>
     <div v-if="view=='view'" id="photo" class="flexbin">
-      <image-tile v-for="(image, index) in guide.photos" v-bind:key="index" v-bind:image.sync="image" v-bind:selection="true" v-on:removed="removePhoto(image)" view="true"></image-tile>
+      <image-tile v-for="(image, index) in photos" v-bind:key="index" v-bind:image.sync="image" v-bind:selection="true" v-on:removed="removePhoto(image)" view="true"></image-tile>
     </div>
 
     <photoSearch v-if="view=='search'" :guideID="guide.id" v-on:added="addPhoto" :IDList="photoIDList"></photoSearch>
 
-    <div v-if="view=='map' && hasMapData" id="map-view" >
-      <mapView :photos="guide.photos"></mapView>
+    <div v-if="view=='map' && guide.location.latitude" id="map-view" >
+      <mapView :photos="photos" :guideLocation="guide.location"></mapView>
     </div>
 
 
     <div v-if="view=='info'" id="info-view">
-      <infoView :guide="guide"></infoView>
+      <infoView :guide="guide" :photos="photos"></infoView>
     </div>
   </div>
 </template>
@@ -66,29 +66,16 @@ export default {
   },
 
   mounted: function () {
-    api.GetGuidePhoto(this, data => {this.guide = data.body}, function(){}, {id: this.guideID})
+    api.GetGuideInfo(this, data => {this.guide = data.body}, function(){}, {guide_id: this.guideID})
+    api.GetGuidePhoto(this, data => {this.photos = data.body}, function(){}, {guide_id: this.guideID})
   },
 
   computed: {
-    hasMapData: function(){
-      // Check that there is any photo
-      if(this.guide.photos.length == 0)
-          return false
-
-      // Check that there is some position available
-      for(var i=0; i<this.guide.photos.length; i++) {
-          var photo = this.guide.photos[i]
-          if(photo.latitude != ""){
-              return true
-          }
-      }
-      return false
-    },
     photoIDList: function(){
       var IDList = []
 
-      for(var i=0; i<this.guide.photos.length; i++){
-        IDList.push(this.guide.photos[i].flickr_id)
+      for(var i=0; i<this.photos.length; i++){
+        IDList.push(this.photos[i].flickr_id)
       }
 
       return IDList
@@ -96,13 +83,16 @@ export default {
   },
 
   methods: {
+    navScroll: function(){
+      var el = document.getElementById('app-nav')
+      var top = el.getBoundingClientRect().top
+
+      console.log(top)
+    },
     removePhoto: function(image){
       api.RemovePhoto(this, function(){}, function(){}, {
-        "guide": this.guideID,
-        "image": {
-          "origin": "flickr",
-          "id": image.flickr_id
-        }
+        "guide_id": this.guideID,
+        "photo_id": image.id
       })
 
       this.guide.photos.splice(this.guide.photos.indexOf(image), 1)
@@ -122,21 +112,38 @@ export default {
 @import "styles/flexbin.scss";
 
 #app-nav {
-  background-color: #FCFCFC;
   display: block;
   padding: 1em 2em;
   height: 3em;
+  width: 100%;
 
   ul  {
     margin: 0;
     list-style: none;
+    display: flex;
+    justify-content: flex-end;
 
     li {
-      float: right;
+      float: left;
       color: #333;
       line-height: 2em;
       font-size: 1.5em;
-      margin-right: 1em
+      margin-right: 1em;
+
+      a {
+        color:#333;
+        &:hover {
+          color: $primary-color-1;
+        }
+      }
+    }
+  }
+
+  &.vertical{
+    ul {
+      position: fixed;
+      text-align: right;
+      flex-direction: column;
     }
   }
 }

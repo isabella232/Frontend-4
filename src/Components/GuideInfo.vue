@@ -3,19 +3,19 @@
     <div id="guideFullInfo">
         <section class="infoSection">
             <h3>Gear</h3>
-            <lensViewer :photos="guide.photos"></lensViewer>
+            <lensViewer :photos="photos"></lensViewer>
         </section>
 
-        <section class="infoSection">
+        <section class="infoSection" v-if="guide.location.latitude">
             <h3>Weather</h3>
-            <weatherView :id="guide.id" :location="featuredPosition"></weatherView>
+            <weatherView :id="guide.id" :location="guide.location"></weatherView>
         </section>
     </div>
     <div id="guideShortInfo">
-        <div class="smallMap" v-if="featuredPosition.valid">
-            <v-map :zoom=4 :options=mapOptions :center="[featuredPosition.latitude, featuredPosition.longitude]">
-                <v-tilelayer url="http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg "></v-tilelayer>
-                <v-marker :lat-lng="[featuredPosition.latitude, featuredPosition.longitude]"></v-marker>
+        <div class="smallMap" v-if="guide.location.latitude">
+            <v-map :zoom=4 :options=mapOptions :center="[guide.location.latitude, guide.location.longitude]">
+                <v-tilelayer url="http://tile.stamen.com/toner-background/{z}/{x}/{y}.png "></v-tilelayer>
+                <v-marker :lat-lng="[guide.location.latitude, guide.location.longitude]" :icon="icon"></v-marker>
             </v-map>
         </div>
         <ul>
@@ -37,7 +37,7 @@
             <li>
                 <i class="fa fa-picture-o" aria-hidden="true"></i>
                 <strong>Pictures:</strong>
-                {{guide.photos.length}}
+                {{guide.number_photo}}
             </li>
         </ul>
         <div id="settings">
@@ -70,11 +70,11 @@ import weatherView from './WeatherView.vue'
 export default {
     name: 'guideinfo',
     components: {
-      'v-map': Vue2Leaflet.Map,
-      'v-tilelayer' :Vue2Leaflet.TileLayer,
-      'v-marker': Vue2Leaflet.Marker,
-      lensViewer,
-      weatherView
+        'v-map': Vue2Leaflet.Map,
+        'v-tilelayer' :Vue2Leaflet.TileLayer,
+        'v-marker': Vue2Leaflet.Marker,
+        lensViewer,
+        weatherView
     },
     props: ['guide'],
     data () {
@@ -87,25 +87,21 @@ export default {
                 boxZoom: false,
                 scrollWheelZoom: false
             },
-            lensFocal: [],
-            featuredPosition: {
-                valid: false,
-                latitude: "",
-                longitude: ""
-            }
+            photos: [],
+            icon: L.icon({
+                iconUrl: 'src/assets/marker.png',
+                iconSize:     [35, 35],
+            })
         }
     },
-
-    mounted () {
-        this.setFeaturedPosition()
+    mounted: function() {
+        api.GetGuidePhoto(this, data => {this.photos = data.body}, function(){}, {guide_id: this.guide.id})
     },
-
     watch: {
-        guide() {
-            this.setFeaturedPosition()
+        guide: function (){
+            api.GetGuidePhoto(this, data => {this.photos = data.body}, function(){}, {guide_id: this.guide.id})
         }
     },
-
     methods: {
         formatDate: function (date) {
             return moment(date).format("MMM Do YY");
@@ -117,30 +113,11 @@ export default {
 
         changeGuideVisibility: function() {
             api.UpdateGuide(this, function(){}, function(){}, {
-                "id": this.guide.id,
-                "label": "visibility",
-                "data": this.guide.visibility == 0 ? 1 : 0
-            })
-        },
-
-        setFeaturedPosition: function() {
-            if(this.guide != "new")
-            {
-                // Check that there is any photo
-                if(this.guide.photos.length == 0)
-                    return
-
-                // Check that there is some position available
-                for(var i=0; i<this.guide.photos.length; i++) {
-                    var photo = this.guide.photos[i]
-                    if(photo.latitude != ""){
-                        this.featuredPosition.latitude = photo.latitude
-                        this.featuredPosition.longitude = photo.longitude
-                        this.featuredPosition.valid = true
-                        return
-                    }
+                "guide_id": this.guide.id,
+                "guide_info": {
+                    "visibility": this.guide.visibility == 0 ? 1 : 0
                 }
-            }
+            })
         }
     },
 }
@@ -166,10 +143,6 @@ export default {
             height: 20em;
             border-radius: 0.5em;
             overflow: hidden;
-
-            .leaflet-shadow-pane {
-            display: none;
-            }
         }
 
         ul {

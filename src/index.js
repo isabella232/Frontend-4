@@ -7,9 +7,13 @@ import Account from './Account.vue'
 import Guide from './Guide.vue'
 import Explore from './Explore.vue'
 import auth from './auth'
+import VModal from 'vue-js-modal'
+import vuescroll from 'vue-scroll'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 Vue.use(VueResource)
+Vue.use(VModal)
+Vue.use(vuescroll)
 
 const routes = [
   { path: '/', component: Index },

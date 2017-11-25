@@ -1,7 +1,7 @@
 <template>
     <div class="hero left">
         <h2 v-if="title">{{title}}</h2>
-        <v-map class="mapOverlay" :zoom=13 :options=mapOptions :center="[featuredPosition.latitude, featuredPosition.longitude]">
+        <v-map class="mapOverlay" :zoom=13 :options=mapOptions :center="[guideLocation.latitude, guideLocation.longitude]">
                 <v-tilelayer url="http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg "></v-tilelayer>
             </v-map>
     </div>
@@ -25,41 +25,12 @@ export default {
                 doubleClickZoom: false,
                 boxZoom: false,
                 scrollWheelZoom: false
-            },
-            featuredPosition: {
-                valid: false,
-                latitude: "",
-                longitude: ""
-            }
-        }
-    },
-    mounted () {
-        this.setFeaturedPosition()
-    },
-    methods: {
-        setFeaturedPosition: function() {
-            if(this.guide != "new")
-            {
-                // Check that there is any photo
-                if(this.guide.photos.length == 0)
-                    return
-
-                // Check that there is some position available
-                for(var i=0; i<this.guide.photos.length; i++) {
-                    var photo = this.guide.photos[i]
-                    if(photo.latitude != ""){
-                        this.featuredPosition.latitude = photo.latitude
-                        this.featuredPosition.longitude = photo.longitude
-                        this.featuredPosition.valid = true
-                        return
-                    }
-                }
             }
         }
     },
     props: [
         'title',
-        'guide'
+        'guideLocation'
     ]
 }
 </script>
