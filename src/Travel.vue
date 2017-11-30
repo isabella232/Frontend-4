@@ -2,7 +2,7 @@
   <div id="travel-page">
     <navbar></navbar>
 
-    <hero title="Plan your next adventure" image="lost.jpg" dark="true"></hero>
+    <hero title="Plan your next adventure" image="travel.jpg" dark="true" top="-400px"></hero>
 
     <div id="guides">
       <div id="search">
