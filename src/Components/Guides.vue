@@ -2,7 +2,7 @@
   <div id="guide-view">
     <swiper :options="swiperOption" ref="guideSwiper">
       <swiper-slide class="guide new">
-        <input type="text" placeholder="Create a new guide" class="title input" v-model="newguide">
+        <input type="text" placeholder="New guide title" class="title input" v-model="newguide">
         <p v-if="newguide" class="title button" v-on:click="createGuide">Create!</p>
       </swiper-slide>
       <swiper-slide v-for="(guide, index) in sortedGuides" v-bind:key="index" class="guide" v-on:mouseover="onGuideSelected(guide)">
@@ -11,7 +11,6 @@
           <h3 class="title">{{guide.title}}</h3>
         </router-link>
       </swiper-slide>
-      <div class="swiper-pagination" slot="pagination"></div>
       <div class="swiper-button-prev" slot="button-prev"></div>
       <div class="swiper-button-next" slot="button-next"></div>
     </swiper>
@@ -37,10 +36,8 @@ export default {
       guides: [],
       newguide: "",
       swiperOption: {
-          pagination: '.swiper-pagination',
           slidesPerView: 4,
           centeredSlides: true,
-          paginationClickable: true,
           spaceBetween: 30,
           nextButton: '.swiper-button-next',
           prevButton: '.swiper-button-prev',

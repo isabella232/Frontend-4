@@ -1,5 +1,5 @@
 <template>
-    <div class="hero" :class="{dark: dark, left:left, textBlack:textBlack}" v-bind:style='{backgroundImage: "url(" + imgUrl(image) + ")", }'>
+    <div class="hero" :class="{dark: dark, left:left, textBlack:textBlack}" v-bind:style='{backgroundImage: "url(" + imgUrl(image) + ")", "backgroundPositionY": top }'>
         <h2 v-if="title">{{title}}</h2>
     </div>
 </template>
@@ -19,7 +19,8 @@ export default {
         'image',
         'dark',
         'left',
-        'textBlack'
+        'textBlack',
+        'top'
     ]
 }
 </script>
@@ -38,7 +39,7 @@ export default {
     overflow: hidden;
 
     background: no-repeat center top fixed;
-    background-size: 100% auto;
+    background-size: cover;
 
     h2 {
         text-align: center;
