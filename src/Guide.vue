@@ -4,7 +4,7 @@
 
     <heroMap :title="guide.title" :guideLocation="guide.location"></heroMap>
 
-    <nav id="app-nav" class="vertical" v-scroll="navScroll">
+    <nav id="app-nav" class="" v-scroll="navScroll">
       <ul>
         <li><router-link to="info">Info</router-link></li>
         <li><router-link to="view">View</router-link></li>
