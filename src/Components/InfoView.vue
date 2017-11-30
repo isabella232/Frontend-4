@@ -185,7 +185,7 @@ export default {
 
                 let bar = this.draw.rect(w, h).move(x, y).attr('fill', fillColor)
 
-                var newDay = moment(this.reports[i].dt_txt).format("DD[/]MM[/]YY")
+                var newDay = moment(this.reports[i].dt_txt).format("DD[/]MM")
                 if(day == "" || newDay != day) {
                     day = newDay
 
