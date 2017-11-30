@@ -59,7 +59,6 @@ export default {
         }
     },
     mounted() {
-        console.log(this.$el)
         // Get the report
         api.GetGuideWeather(
             this,

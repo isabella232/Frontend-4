@@ -20,6 +20,9 @@ var ENTRYPOINT_GUIDE_INTERACTION = "/guide"
 var ENTRYPOINT_GUIDE_PHOTO_INTERACTION = "/guide/photo"
 
 
+var ENTRYPOINT_GUIDE_NEAR = "/guide/near"
+
+
 var ENTRYPOINT_USER_INFO = "/user"
 
 var ENTRYPOINT_USER_GEAR = "/user/gear"
@@ -158,6 +161,10 @@ export default {
 
     SearchPhoto(context, success, failure, data) {
         Get(context, ENTRYPOINT_PHOTO_SEARCH, success, failure, auth.getAuthHeader(), data)
+    },
+
+    GuideNear(context, success, failure, data) {
+        Get(context, ENTRYPOINT_GUIDE_NEAR, success, failure, auth.getAuthHeader(), data)
     },
 
     // Photo related API
