@@ -90,14 +90,24 @@ export default {
         }
 
         img {
-            height: 40vh;
-            width: auto;
-            margin: 2em auto;
+          @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+            height: auto;
+            width: 60%;
+          }
+
+          height: 40vh;
+          width: auto;
+          margin: 2em auto;
         }
 
         h2 {
-            font-weight: 100;
-            font-size: 3.5em;
+          @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+            font-size: 2em;
+            width: 80%;
+            margin: 0em auto;
+          }
+          font-weight: 100;
+          font-size: 3.5em;
         }
     }
   }
