@@ -55,7 +55,7 @@ export default {
     width: 100%;
     left: 0;
     right: 0;
-    position: fixed;
+    position: absolute;
     background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.3) 50%,rgba(0,0,0,0) 100%);
 
     z-index: 999;
