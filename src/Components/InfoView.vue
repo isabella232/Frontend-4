@@ -1,43 +1,49 @@
 <template>
 <div>
-  <!-- <div class="sectionTitle">
-      <h2>Guide</h2>
-      <span>Make this guide yours</span>
-  </div>
-  <div class="sectionTitle">
-      <h2>Information</h2>
-      <span>Know where you are going</span>
-  </div>-->
-  <div class="sectionTitle">
-      <h2>Gear</h2>
-      <span>Pack the right equipement</span>
-  </div>
-  <section id="gear">
-      <div id="useraccessories">
-          <div id="flash" class="accessory active">
-              <div class="tag"><i class="fa fa-bolt" aria-hidden="true"></i></div>
-                <p>You might need a flash. <strong>25%</strong> of the photos in your guide are taken using a flash</p>
-          </div>
-
-          <div id="tripod" class="accessory">
-              <div class="tag"><i class="fa fa-spoon" aria-hidden="true"></i></div>
-                <p>You might not need to take your tripod. Selected photos are taken at <strong>high speed</strong> and <strong>the sky looks clear</strong></p>
-          </div>
-      </div>
-    <lensViewer :photos="photos" :selected="selectedFocal"></lensViewer>
-    <div id="userGear">
-        <ul v-if="userGear.length > 0">
-            <li v-for="gear in selectedGear" :class="{active:gear.active}">{{gear.display_name}}</li>
-        </ul>
-        <p v-else>Add your lenses to your account to get cusom gear advises</p>
+    <!-- <div class="sectionTitle">
+        <h2>Guide</h2>
+        <span>Make this guide yours</span>
     </div>
-  </section>
-  <div class="sectionTitle">
-      <h2>Weather</h2>
-      <span>The sky at a glance</span>
-  </div>
+    <div class="sectionTitle">
+        <h2>Information</h2>
+        <span>Know where you are going</span>
+    </div>-->
+    <div class="sectionTitle">
+        <h2>Gear</h2>
+        <span>Pack the right equipement</span>
+    </div>
+    <section id="gear">
+        <div id="useraccessories">
+            <div id="flash" class="accessory active">
+                <div class="tag"><i class="fa fa-bolt" aria-hidden="true"></i></div>
+                    <p>You might need a flash. <strong>25%</strong> of the photos in your guide are taken using a flash</p>
+            </div>
 
+            <div id="tripod" class="accessory">
+                <div class="tag"><i class="fa fa-spoon" aria-hidden="true"></i></div>
+                    <p>You might not need to take your tripod. Selected photos are taken at <strong>high speed</strong> and <strong>the sky looks clear</strong></p>
+            </div>
+        </div>
+        <lensViewer :photos="photos" :selected="selectedFocal"></lensViewer>
+        <div id="userGear">
+            <ul v-if="userGear.length > 0">
+                <li v-for="gear in selectedGear" :class="{active:gear.active}">{{gear.display_name}}</li>
+            </ul>
+            <p v-else>Add your lenses to your account to get cusom gear advises</p>
+        </div>
+    </section>
+
+    <div class="sectionTitle">
+        <h2>Weather</h2>
+        <span>The sky at a glance</span>
+    </div>
     <weatherFull :guide="guide"></weatherFull>
+
+    <div class="sectionTitle">
+        <h2>Landmarks</h2>
+        <span>Places of interests nearby</span>
+    </div>
+    <placesNear :guide="guide"></placesNear>
 
 </div>
 </template>
@@ -48,13 +54,15 @@ import api from '../api'
 import moment from 'moment'
 import lensViewer from './LensViewer.vue'
 import weatherFull from './WeatherFull.vue'
+import placesNear from './PlacesNear.vue'
 
 export default {
     name:'infoView',
     props: ['guide', 'photos'],
     components: {
       lensViewer,
-      weatherFull
+      weatherFull,
+      placesNear
     },
     data () {
         return {
