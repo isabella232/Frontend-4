@@ -14,6 +14,7 @@
     </nav>
     <div v-if="view=='view'" id="photo" class="flexbin">
       <image-tile v-for="(image, index) in photos" v-bind:key="index" v-bind:image.sync="image" v-bind:selection="true" v-on:removed="removePhoto(image)" view="true"></image-tile>
+      <infinite-loading @infinite="infiniteHandler" v-if="photoLoaded"></infinite-loading>
     </div>
 
     <photoSearch v-if="view=='search'" :guideID="guide.id" v-on:added="addPhoto" :IDList="photoIDList"></photoSearch>
@@ -41,6 +42,7 @@ import heroMap from './Components/HeroMap.vue'
 import photoSearch from './Components/PhotoSearch.vue'
 import mapView from './Components/MapView.vue'
 import infoView from './Components/InfoView.vue'
+import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
   name: 'guide',
@@ -54,20 +56,23 @@ export default {
       heroMap,
       photoSearch,
       mapView,
-      infoView
+      infoView,
+      InfiniteLoading
   },
   props: ['guideID', 'view'],
   data () {
     return {
       guide: {},
       photos: [],
-      authenticated: auth.user.authenticated
+      authenticated: auth.user.authenticated,
+      photoLoaded: false,
+      currentPage: 0
     }
   },
 
   mounted: function () {
     api.GetGuideInfo(this, data => {this.guide = data.body}, function(){}, {guide_id: this.guideID})
-    api.GetGuidePhoto(this, data => {this.photos = data.body}, function(){}, {guide_id: this.guideID})
+    api.GetGuidePhoto(this, data => {this.photos = data.body; this.photoLoaded=true}, function(){}, {guide_id: this.guideID})
   },
 
   computed: {
@@ -95,11 +100,27 @@ export default {
         "photo_id": image.id
       })
 
-      this.guide.photos.splice(this.guide.photos.indexOf(image), 1)
+      this.photos.splice(this.photos.indexOf(image), 1)
     },
     addPhoto: function(photo) {
-      this.guide.photos.push(photo)
-    }
+      this.photos.push(photo)
+    },
+    infiniteHandler($state) {
+      console.log("End of the line")
+      this.currentPage++
+      api.GetGuidePhoto(this, data => {
+          // get body data
+          this.photos = this.photos.concat(data.body)
+
+          if(data.body.length==0)
+              this.photoLoaded = false
+
+          setTimeout(() => {
+              $state.loaded()
+          },100)
+
+      }, function(){}, {guide_id: this.guideID, page: this.currentPage})
+    },
   }
 }
 </script>
