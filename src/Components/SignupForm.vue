@@ -1,5 +1,5 @@
 <template>
-    <modal name="signup" transition="pop-out" :width="400" :height="400">
+    <modal name="signup" transition="pop-out" height="auto">
         <div class="form">
             <h3 class="title">Sign up</h3>
             <input class="input-text" type="text" placeholder="Username" id="username" v-model="credentials.username" v-on:keyup.enter="submit"/>
@@ -9,6 +9,8 @@
             <input class="input-text" type="text" placeholder="Beta code" id="code" v-model="credentials.code" v-on:keyup.enter="submit"/>
 
             <span class="button" id="signin" v-on:click="submit">Sign up</span>
+            <p class="error" v-if="error!=''">{{error}}</p>
+            <p class="success" v-if="success!=''">{{success}}</p>
         </div>
     </modal>
 </template>
@@ -28,13 +30,23 @@ export default {
                 password: "",
                 repassword: "",
                 code: ""
-            }
+            },
+            error: "",
+            success: ""
         }
     },
     methods: {
         submit() {
             if(this.credentials.password == this.credentials.repassword)
-                api.Signup(this, function(){}, function(){}, this.credentials)
+                api.Signup(this,
+                data => {
+                    this.error = ""
+                    this.success = "Registration successful, you may now proceed to login"
+                }, data => {
+                    this.error = data.body.error
+                }, this.credentials)
+            else
+                this.error = "Passwords are different"
         }
     }
 }
@@ -81,6 +93,22 @@ export default {
         margin: 0.5em 0;
         padding-left: 1.1em;
         font-weight: 300;
+    }
+
+    .error {
+        width: 80%;
+        border: 3px solid #D91E18;
+        margin: 1em;
+        padding: 0.5em;
+        color: #333;
+    }
+
+    .success {
+        width: 80%;
+        border: 3px solid #26A65B;
+        margin: 1em;
+        padding: 0.5em;
+        color: #333;
     }
 }
 </style>
