@@ -108,7 +108,7 @@ export default {
         },
 
         deleteGuide: function() {
-            api.DeleteGuide(this, function(){}, function(){}, {"id": this.guide.id})
+            api.DeleteGuide(this, function(){}, function(){}, {"guide_id": this.guide.id})
         },
 
         changeGuideVisibility: function() {

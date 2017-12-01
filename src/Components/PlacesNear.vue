@@ -1,9 +1,13 @@
 <template>
     <div id="places-view">
-        <div v-for="place in places" class="place">
-            <div class="image" v-bind:style='{backgroundImage: "url(" + place.image + ")"}'></div>
-            <span class="name">{{place.name}}</span>
-        </div>
+        <i v-if="!loaded"  class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <router-link v-if="loaded" v-for="place in places" :to="{path: 'search', query: { query: place.name }}">
+            <div class="place">
+                <div class="image" v-bind:style='{backgroundImage: "url(" + place.image + ")"}'></div>
+                <span class="name">{{place.name}}</span>
+            </div>
+        </router-link>
+        <p v-if="loaded && places.length == 0">No landmarks found nearby ...</p>
     </div>
 </template>
 
@@ -16,7 +20,8 @@ export default {
     ],
     data () {
         return {
-            places: []
+            places: [],
+            loaded: false
         }
     },
     mounted() {
@@ -24,6 +29,7 @@ export default {
             this,
             data=>{
                 this.places = data.body
+                this.loaded = true
             },
             error => {
                 console.log(error)
@@ -63,6 +69,7 @@ export default {
         text-align: center;
         width: 100%;
         font-size: 1.2em;
+        color: #333;
     }
 }
 </style>
