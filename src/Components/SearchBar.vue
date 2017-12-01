@@ -14,7 +14,12 @@ export default {
           keywords:""
       }
   },
-
+  mounted: function(){
+      if(this.$route.query.query != "") {
+        this.keywords = this.$route.query.query
+        this.$emit("search", this.keywords)
+      }
+  },
   methods: {
       onClick: function() {
           this.$emit("search", this.keywords)
