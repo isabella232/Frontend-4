@@ -14,14 +14,17 @@
     </div>
     <section id="gear">
         <div id="useraccessories">
-            <div id="flash" class="accessory active">
+            <div id="flash" class="accessory" :class="{active:flashPercent>10}">
                 <div class="tag"><i class="fa fa-bolt" aria-hidden="true"></i></div>
-                    <p>You might need a flash. <strong>25%</strong> of the photos in your guide are taken using a flash</p>
+                <p v-if="flashPercent>10">You might need a flash. <strong>{{flashPercent}}%</strong> of the photos in your guide are taken using a flash</p>
+                <p v-else>You might not need a flash. <strong>{{flashPercent}}%</strong> of the photos in your guide are taken using a flash</p>
             </div>
 
-            <div id="tripod" class="accessory">
+            <div id="tripod" class="accessory" :class="{active:percentSlow>=25}">
                 <div class="tag"><i class="fa fa-spoon" aria-hidden="true"></i></div>
-                    <p>You might not need to take your tripod. Selected photos are taken at <strong>high speed</strong> and <strong>the sky looks clear</strong></p>
+
+                <p v-if="percentSlow<25">You might not need to take your tripod. <strong>{{100-percentSlow}}%</strong> of the selected photos are taken at <strong>high speed</strong></p>
+                <p v-else>You might need to take your tripod. <strong>{{percentSlow}}%</strong> of the selected photos are taken at <strong>slow speed</strong></p>
             </div>
         </div>
         <lensViewer :photos="photos" :selected="selectedFocal"></lensViewer>
@@ -89,6 +92,45 @@ export default {
             }
 
             return selectedGear
+        },
+        flashPercent: function(){
+            var flashCount = 0
+
+            if(this.photos.length == 0)
+                return 0
+
+            for(var i=0; i < this.photos.length; i++)
+                if(this.photos[i].flash_fired)
+                    flashCount++
+            return Math.round((flashCount / this.photos.length)*100)
+        },
+        percentSlow:function(){
+            var slowCount = 0
+            var slowest = 1/90
+            var expoCount = 0
+
+            if(this.photos.length == 0)
+                return 0
+
+            for(var i=0; i < this.photos.length; i++){
+                if(this.photos[i].exposure){
+                    expoCount++
+                    var re = /\d\/(\d*)/
+                    // 1 over format
+                    var data;
+                    if(data = this.photos[i].exposure.match(re)){
+                        var speed = 1/ data[1]
+                        if(speed > slowest)
+                            slowCount++
+                    }
+                    else{
+                        slowCount++
+                    }
+                }
+            }
+
+            return Math.round((slowCount / expoCount)*100)
+
         }
     },
     mounted: function() {
