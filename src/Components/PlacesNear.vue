@@ -7,6 +7,7 @@
                 <span class="name">{{place.name}}</span>
             </div>
         </router-link>
+        <p v-if="loaded && places.length == 0">No landmarks found nearby ...</p>
     </div>
 </template>
 
