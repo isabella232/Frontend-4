@@ -21,6 +21,7 @@ export default {
             icon: L.icon({
                 iconUrl: 'src/assets/marker.png',
                 iconSize:     [35, 35],
+                iconAnchor:   [17, 35]
             })
         }
     },
