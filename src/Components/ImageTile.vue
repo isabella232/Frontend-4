@@ -5,8 +5,8 @@
         </span>
         <img v-bind:src="getUrl(image)">
 
-        <div class="infoLeft">
-            <div v-if="view" class="remove" v-on:click="removeAction" ><i class="fa fa-trash" aria-hidden="true"></i></div>
+        <div class="infoLeft" v-if="view">
+            <div class="remove" v-on:click="removeAction" ><i class="fa fa-trash" aria-hidden="true"></i></div>
             <router-link v-if="image.location.latitude != 0" :to="{ path: 'map', query: { photo: image.id }}">
                 <i class="fa fa-map" aria-hidden="true"></i>
             </router-link>
