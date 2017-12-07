@@ -14,12 +14,12 @@
     </nav>
     <div v-if="view=='view'" id="photo" class="flexbin">
       <image-tile v-for="(image, index) in photos" v-bind:key="index" v-bind:image.sync="image" v-bind:selection="true" v-on:removed="removePhoto(image)" view="true"></image-tile>
-      <infinite-loading @infinite="infiniteHandler" v-if="photoLoaded"></infinite-loading>
+      <!-- <infinite-loading @infinite="infiniteHandler" v-if="photoLoaded"></infinite-loading> -->
     </div>
 
     <photoSearch v-if="view=='search'" :guideID="guide.id" v-on:added="addPhoto" :IDList="photoIDList"></photoSearch>
 
-    <div v-if="view=='map' && guide.location.latitude" id="map-view" >
+    <div v-if="view=='map' && guide.location.latitude && photos.length != 0" id="map-view" >
       <mapView :photos="photos" :guideLocation="guide.location"></mapView>
     </div>
 
@@ -72,7 +72,13 @@ export default {
 
   mounted: function () {
     api.GetGuideInfo(this, data => {this.guide = data.body}, function(){}, {guide_id: this.guideID})
-    api.GetGuidePhoto(this, data => {this.photos = data.body; this.photoLoaded=true}, function(){}, {guide_id: this.guideID})
+    api.GetGuidePhoto(this, data => {
+      this.photos = data.body
+      this.photoLoaded=true
+    }, function(){}, {
+      guide_id: this.guideID,
+      per_page: 60
+    })
   },
 
   computed: {
@@ -129,6 +135,8 @@ export default {
 <style lang="scss">
 @import "styles/global.scss";
 @import "../node_modules/leaflet/dist/leaflet.css";
+
+$flexbin-row-height: 320px;
 
 @import "styles/flexbin.scss";
 
